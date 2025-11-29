@@ -1,39 +1,52 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
-import type { DisasterData } from "@/lib/types"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Upload, Search, AlertTriangle } from "lucide-react"
-import { UploadDialog } from "@/components/upload-dialog"
+import { useState, useMemo } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Upload, Search, AlertTriangle } from "lucide-react";
+import { UploadDialog } from "@/components/upload-dialog";
+import { DisasterData } from "@/interfaces/DisasterData";
 
 interface DisasterDashboardProps {
-  initialData: DisasterData[]
+  initialData: DisasterData[];
 }
 
 export function DisasterDashboard({ initialData }: DisasterDashboardProps) {
-  const [data, setData] = useState<DisasterData[]>(initialData)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [isUploadOpen, setIsUploadOpen] = useState(false)
+  const [data, setData] = useState<DisasterData[]>(initialData);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
 
   // Filter data based on search term
   const filteredData = useMemo(() => {
-    if (!searchTerm) return data
+    if (!searchTerm) return data;
 
-    const search = searchTerm.toLowerCase()
+    const search = searchTerm.toLowerCase();
     return data.filter((item) => {
       return (
         item.kecamatan.toLowerCase().includes(search) ||
-        item.no.toString().includes(search) ||
+        (item.no ?? "").toString().includes(search) ||
         item.jumlah_penduduk.toString().includes(search) ||
         item.meninggal.toString().includes(search) ||
         item.luka.toString().includes(search) ||
         item.hilang.toString().includes(search)
-      )
-    })
-  }, [data, searchTerm])
+      );
+    });
+  }, [data, searchTerm]);
 
   // Calculate totals
   const totals = useMemo(() => {
@@ -65,9 +78,9 @@ export function DisasterDashboard({ initialData }: DisasterDashboardProps) {
         sekolah_ringan: 0,
         sekolah_sedang: 0,
         sekolah_berat: 0,
-      },
-    )
-  }, [filteredData])
+      }
+    );
+  }, [filteredData]);
 
   return (
     <div className="container mx-auto py-8 px-4 md:px-6">
@@ -79,8 +92,12 @@ export function DisasterDashboard({ initialData }: DisasterDashboardProps) {
               <AlertTriangle className="h-6 w-6 text-destructive" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Data Bencana Banjir Bandang dan Longsor</h1>
-              <p className="text-muted-foreground text-sm md:text-base">Tanggal 29 November Pukul 08.00 2025</p>
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+                Data Bencana Banjir Bandang dan Longsor
+              </h1>
+              <p className="text-muted-foreground text-sm md:text-base">
+                Tanggal 29 November Pukul 08.00 2025
+              </p>
             </div>
           </div>
           <Button onClick={() => setIsUploadOpen(true)} className="w-fit">
@@ -93,26 +110,36 @@ export function DisasterDashboard({ initialData }: DisasterDashboardProps) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardDescription className="text-xs">Total Penduduk</CardDescription>
-              <CardTitle className="text-2xl md:text-3xl">{totals.jumlah_penduduk.toLocaleString()}</CardTitle>
+              <CardDescription className="text-xs">
+                Total Penduduk
+              </CardDescription>
+              <CardTitle className="text-2xl md:text-3xl">
+                {totals.jumlah_penduduk.toLocaleString()}
+              </CardTitle>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader className="pb-2">
               <CardDescription className="text-xs">Meninggal</CardDescription>
-              <CardTitle className="text-2xl md:text-3xl text-destructive">{totals.meninggal}</CardTitle>
+              <CardTitle className="text-2xl md:text-3xl text-destructive">
+                {totals.meninggal}
+              </CardTitle>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader className="pb-2">
               <CardDescription className="text-xs">Terdampak</CardDescription>
-              <CardTitle className="text-2xl md:text-3xl">{totals.terdampak.toLocaleString()}</CardTitle>
+              <CardTitle className="text-2xl md:text-3xl">
+                {totals.terdampak.toLocaleString()}
+              </CardTitle>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader className="pb-2">
               <CardDescription className="text-xs">Pengungsi</CardDescription>
-              <CardTitle className="text-2xl md:text-3xl">{totals.pengungsi.toLocaleString()}</CardTitle>
+              <CardTitle className="text-2xl md:text-3xl">
+                {totals.pengungsi.toLocaleString()}
+              </CardTitle>
             </CardHeader>
           </Card>
         </div>
@@ -136,47 +163,75 @@ export function DisasterDashboard({ initialData }: DisasterDashboardProps) {
                 <TableHeader>
                   <TableRow className="bg-muted/50">
                     <TableHead className="w-16 font-semibold">NO</TableHead>
-                    <TableHead className="min-w-[150px] font-semibold">KECAMATAN</TableHead>
-                    <TableHead className="text-right font-semibold min-w-[120px]">JUMLAH PENDUDUK</TableHead>
+                    <TableHead className="min-w-[150px] font-semibold">
+                      KECAMATAN
+                    </TableHead>
+                    <TableHead className="text-right font-semibold min-w-[120px]">
+                      JUMLAH PENDUDUK
+                    </TableHead>
                     <TableHead className="text-right font-semibold">
                       MENINGGAL
                       <br />
-                      <span className="text-xs font-normal text-muted-foreground">(JIWA)</span>
+                      <span className="text-xs font-normal text-muted-foreground">
+                        (JIWA)
+                      </span>
                     </TableHead>
                     <TableHead className="text-right font-semibold">
                       LUKA
                       <br />
-                      <span className="text-xs font-normal text-muted-foreground">(JIWA)</span>
+                      <span className="text-xs font-normal text-muted-foreground">
+                        (JIWA)
+                      </span>
                     </TableHead>
                     <TableHead className="text-right font-semibold">
                       HILANG
                       <br />
-                      <span className="text-xs font-normal text-muted-foreground">(JIWA)</span>
+                      <span className="text-xs font-normal text-muted-foreground">
+                        (JIWA)
+                      </span>
                     </TableHead>
                     <TableHead className="text-right font-semibold min-w-[120px]">
                       PENGUNGSI
                       <br />
-                      <span className="text-xs font-normal text-muted-foreground">(JIWA)</span>
+                      <span className="text-xs font-normal text-muted-foreground">
+                        (JIWA)
+                      </span>
                     </TableHead>
                     <TableHead className="text-right font-semibold">
                       TERDAMPAK
                       <br />
-                      <span className="text-xs font-normal text-muted-foreground">(JIWA)</span>
+                      <span className="text-xs font-normal text-muted-foreground">
+                        (JIWA)
+                      </span>
                     </TableHead>
-                    <TableHead className="text-center font-semibold" colSpan={3}>
+                    <TableHead
+                      className="text-center font-semibold"
+                      colSpan={3}
+                    >
                       RUMAH RUSAK
                     </TableHead>
-                    <TableHead className="text-center font-semibold" colSpan={3}>
+                    <TableHead
+                      className="text-center font-semibold"
+                      colSpan={3}
+                    >
                       SEKOLAH RUSAK
                     </TableHead>
                   </TableRow>
                   <TableRow className="bg-muted/30">
                     <TableHead colSpan={8}></TableHead>
-                    <TableHead className="text-center text-xs">RINGAN</TableHead>
-                    <TableHead className="text-center text-xs">SEDANG</TableHead>
+                    <TableHead className="text-center text-xs">
+                      RINGAN
+                    </TableHead>
+                    <TableHead className="text-center text-xs">
+                      SEDANG
+                    </TableHead>
                     <TableHead className="text-center text-xs">BERAT</TableHead>
-                    <TableHead className="text-center text-xs">RINGAN</TableHead>
-                    <TableHead className="text-center text-xs">SEDANG</TableHead>
+                    <TableHead className="text-center text-xs">
+                      RINGAN
+                    </TableHead>
+                    <TableHead className="text-center text-xs">
+                      SEDANG
+                    </TableHead>
                     <TableHead className="text-center text-xs">BERAT</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -184,56 +239,104 @@ export function DisasterDashboard({ initialData }: DisasterDashboardProps) {
                   {filteredData.map((item) => (
                     <TableRow key={item.id} className="hover:bg-muted/50">
                       <TableCell className="font-medium">{item.no}</TableCell>
-                      <TableCell className="font-medium">{item.kecamatan}</TableCell>
-                      <TableCell className="text-right">{item.jumlah_penduduk.toLocaleString()}</TableCell>
+                      <TableCell className="font-medium">
+                        {item.kecamatan}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {item.jumlah_penduduk.toLocaleString()}
+                      </TableCell>
                       <TableCell className="text-right">
                         {item.meninggal > 0 ? (
-                          <span className="font-semibold text-destructive">{item.meninggal}</span>
+                          <span className="font-semibold text-destructive">
+                            {item.meninggal}
+                          </span>
                         ) : (
                           "-"
                         )}
                       </TableCell>
-                      <TableCell className="text-right">{item.luka > 0 ? item.luka : "-"}</TableCell>
-                      <TableCell className="text-right">{item.hilang > 0 ? item.hilang : "-"}</TableCell>
                       <TableCell className="text-right">
-                        {item.pengungsi_di_luar_pandan > 0 ? item.pengungsi_di_luar_pandan.toLocaleString() : "-"}
+                        {item.luka > 0 ? item.luka : "-"}
                       </TableCell>
-                      <TableCell className="text-right">{item.terdampak.toLocaleString()}</TableCell>
-                      <TableCell className="text-center">
-                        {item.rumah_rusak_ringan > 0 ? item.rumah_rusak_ringan : "-"}
+                      <TableCell className="text-right">
+                        {item.hilang > 0 ? item.hilang : "-"}
                       </TableCell>
-                      <TableCell className="text-center">
-                        {item.rumah_rusak_sedang > 0 ? item.rumah_rusak_sedang : "-"}
+                      <TableCell className="text-right">
+                        {item.pengungsi_di_luar_pandan > 0
+                          ? item.pengungsi_di_luar_pandan.toLocaleString()
+                          : "-"}
                       </TableCell>
-                      <TableCell className="text-center">
-                        {item.rumah_rusak_berat > 0 ? item.rumah_rusak_berat : "-"}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {item.sekolah_rusak_ringan > 0 ? item.sekolah_rusak_ringan : "-"}
+                      <TableCell className="text-right">
+                        {item.terdampak.toLocaleString()}
                       </TableCell>
                       <TableCell className="text-center">
-                        {item.sekolah_rusak_sedang > 0 ? item.sekolah_rusak_sedang : "-"}
+                        {item.rumah_rusak_ringan > 0
+                          ? item.rumah_rusak_ringan
+                          : "-"}
                       </TableCell>
                       <TableCell className="text-center">
-                        {item.sekolah_rusak_berat > 0 ? item.sekolah_rusak_berat : "-"}
+                        {item.rumah_rusak_sedang > 0
+                          ? item.rumah_rusak_sedang
+                          : "-"}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {item.rumah_rusak_berat > 0
+                          ? item.rumah_rusak_berat
+                          : "-"}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {item.sekolah_rusak_ringan > 0
+                          ? item.sekolah_rusak_ringan
+                          : "-"}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {item.sekolah_rusak_sedang > 0
+                          ? item.sekolah_rusak_sedang
+                          : "-"}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {item.sekolah_rusak_berat > 0
+                          ? item.sekolah_rusak_berat
+                          : "-"}
                       </TableCell>
                     </TableRow>
                   ))}
                   {/* Totals Row */}
                   <TableRow className="bg-primary/5 font-semibold border-t-2">
                     <TableCell colSpan={2}>TOTAL</TableCell>
-                    <TableCell className="text-right">{totals.jumlah_penduduk.toLocaleString()}</TableCell>
-                    <TableCell className="text-right text-destructive">{totals.meninggal}</TableCell>
+                    <TableCell className="text-right">
+                      {totals.jumlah_penduduk.toLocaleString()}
+                    </TableCell>
+                    <TableCell className="text-right text-destructive">
+                      {totals.meninggal}
+                    </TableCell>
                     <TableCell className="text-right">{totals.luka}</TableCell>
-                    <TableCell className="text-right">{totals.hilang}</TableCell>
-                    <TableCell className="text-right">{totals.pengungsi.toLocaleString()}</TableCell>
-                    <TableCell className="text-right">{totals.terdampak.toLocaleString()}</TableCell>
-                    <TableCell className="text-center">{totals.rumah_ringan}</TableCell>
-                    <TableCell className="text-center">{totals.rumah_sedang}</TableCell>
-                    <TableCell className="text-center">{totals.rumah_berat}</TableCell>
-                    <TableCell className="text-center">{totals.sekolah_ringan}</TableCell>
-                    <TableCell className="text-center">{totals.sekolah_sedang}</TableCell>
-                    <TableCell className="text-center">{totals.sekolah_berat}</TableCell>
+                    <TableCell className="text-right">
+                      {totals.hilang}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {totals.pengungsi.toLocaleString()}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {totals.terdampak.toLocaleString()}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {totals.rumah_ringan}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {totals.rumah_sedang}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {totals.rumah_berat}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {totals.sekolah_ringan}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {totals.sekolah_sedang}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {totals.sekolah_berat}
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -242,7 +345,9 @@ export function DisasterDashboard({ initialData }: DisasterDashboardProps) {
         </Card>
 
         {filteredData.length === 0 && (
-          <div className="text-center py-12 text-muted-foreground">Tidak ada data yang sesuai dengan pencarian</div>
+          <div className="text-center py-12 text-muted-foreground">
+            Tidak ada data yang sesuai dengan pencarian
+          </div>
         )}
       </div>
 
@@ -250,10 +355,10 @@ export function DisasterDashboard({ initialData }: DisasterDashboardProps) {
         isOpen={isUploadOpen}
         onClose={() => setIsUploadOpen(false)}
         onDataUploaded={(newData) => {
-          setData(newData)
-          setIsUploadOpen(false)
+          setData(newData);
+          setIsUploadOpen(false);
         }}
       />
     </div>
-  )
+  );
 }

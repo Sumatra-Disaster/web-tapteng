@@ -1,0 +1,43 @@
+# Node modules
+node_modules/
+
+# Build output
+.next/
+out/
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+.env.*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# Test coverage
+coverage/
+
+# Misc
+*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Mac system files
+*.DS_Store
+
+# Ignore lock files (optional, if using only one lock file type)
+# yarn.lock
+# package-lock.json
+# pnpm-lock.yaml
