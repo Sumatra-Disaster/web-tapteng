@@ -26,4 +26,10 @@ export interface DeceasedData {
   description: string;
 }
 
+export interface EvacueeData {
+  id: string;
+  name: string;
+  location: string;
+}
+
 export type SheetValues = (string | null | undefined)[][];

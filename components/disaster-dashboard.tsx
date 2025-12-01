@@ -159,42 +159,68 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
           className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4"
           aria-live="polite"
         >
-          {statCards.map((stat) => (
-            <Card
-              key={stat.label}
-              className={
-                stat.highlight
-                  ? 'border-destructive/40 bg-destructive/5 shadow-sm hover:cursor-pointer'
-                  : ''
+          {statCards.map((stat) => {
+            const isPengungsi = stat.label === 'Pengungsi';
+            const isKorbanMeninggal = stat.highlight;
+            const clickable = isPengungsi || isKorbanMeninggal;
+
+            const handleClick = () => {
+              if (isKorbanMeninggal) {
+                router.push('/daftar-korban');
+              } else if (isPengungsi) {
+                router.push('/daftar-pengungsi');
               }
-              role={stat.highlight ? 'button' : undefined}
-              tabIndex={stat.highlight ? 0 : undefined}
-              onClick={stat.highlight ? () => router.push('/daftar-korban') : undefined}
-              onKeyDown={
-                stat.highlight
-                  ? (event) => {
-                      if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        router.push('/daftar-korban');
+            };
+
+            return (
+              <Card
+                key={stat.label}
+                className={
+                  stat.highlight
+                    ? 'border-destructive/40 bg-destructive/5 shadow-sm hover:cursor-pointer'
+                    : isPengungsi
+                      ? 'border-yellow-400/40 bg-yellow-400/5 shadow-sm hover:cursor-pointer'
+                      : clickable
+                        ? 'hover:cursor-pointer'
+                        : ''
+                }
+                role={clickable ? 'button' : undefined}
+                tabIndex={clickable ? 0 : undefined}
+                onClick={clickable ? handleClick : undefined}
+                onKeyDown={
+                  clickable
+                    ? (event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault();
+                          handleClick();
+                        }
                       }
-                    }
-                  : undefined
-              }
-              aria-label={stat.highlight ? 'Buka daftar korban meninggal' : undefined}
-            >
-              <CardHeader className="space-y-1">
-                <CardDescription className="text-xs uppercase tracking-wide text-muted-foreground">
-                  {stat.label}
-                </CardDescription>
-                <CardTitle
-                  className={`text-3xl font-bold ${stat.highlight ? 'text-destructive' : ''}`}
-                >
-                  {formatNumber(stat.value)}
-                </CardTitle>
-                <p className="text-xs text-muted-foreground">{stat.description}</p>
-              </CardHeader>
-            </Card>
-          ))}
+                    : undefined
+                }
+                aria-label={
+                  isKorbanMeninggal
+                    ? 'Buka daftar korban meninggal'
+                    : isPengungsi
+                      ? 'Buka daftar pengungsi'
+                      : undefined
+                }
+              >
+                <CardHeader className="space-y-1">
+                  <CardDescription className="text-xs uppercase tracking-wide text-muted-foreground">
+                    {stat.label}
+                  </CardDescription>
+                  <CardTitle
+                    className={`text-3xl font-bold ${
+                      stat.highlight ? 'text-destructive' : isPengungsi ? 'text-yellow-500' : ''
+                    }`}
+                  >
+                    {formatNumber(stat.value)}
+                  </CardTitle>
+                  <p className="text-xs text-muted-foreground">{stat.description}</p>
+                </CardHeader>
+              </Card>
+            );
+          })}
         </section>
 
         {/* Search */}

@@ -1,4 +1,4 @@
-import { DeceasedData, DisasterData, SheetValues } from '../interfaces/DisasterData';
+import { DeceasedData, DisasterData, EvacueeData, SheetValues } from '../interfaces/DisasterData';
 
 const cleanNumber = (value: string | null | undefined): number => {
   if (typeof value === 'string') {
@@ -108,9 +108,9 @@ export function mapSheetDataRefugee(sheetData: SheetValues): {
 
     if (!currentKecamatan) continue;
 
-    const nama = namaCol?.trim() ?? '';
+    const nama = (namaCol as string | undefined)?.trim() ?? '';
     const no = Number(noCol);
-    const jumlah = jumlahCol?.trim() ?? 'Belum diketahui';
+    const jumlah = (jumlahCol as string | undefined)?.trim() ?? 'Belum diketahui';
 
     if (nama.toLowerCase() === 'total' || no === 0) {
       continue;
@@ -126,4 +126,30 @@ export function mapSheetDataRefugee(sheetData: SheetValues): {
   }
 
   return { post, total };
+}
+
+export function mapSheetDataEvacuee(sheetData: SheetValues, location: string): EvacueeData[] {
+  if (!sheetData || sheetData.length === 0) {
+    return [];
+  }
+
+  return sheetData
+    .map((row, index): EvacueeData | null => {
+      if (!row[0]) {
+        return null;
+      }
+
+      const name = String(row[0]).trim();
+      if (name === '') {
+        return null;
+      }
+
+      return {
+        // Include location in the id so it's unique even when merging multiple tabs
+        id: `${location}-${index + 1}`,
+        name,
+        location,
+      };
+    })
+    .filter((record): record is EvacueeData => record !== null);
 }
