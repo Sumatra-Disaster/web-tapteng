@@ -7,7 +7,6 @@ export default async function Home() {
 
   // Get last update time from spreadsheet file metadata
   const lastUpdate = await getSheetLastUpdate(spreadsheetId);
-  console.log(lastUpdate);
   const data = await getSheetData('KECAMATAN!A6:N', spreadsheetId);
 
   const initialData = mapSheetData(data ?? []);
