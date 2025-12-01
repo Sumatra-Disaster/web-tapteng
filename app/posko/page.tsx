@@ -1,6 +1,6 @@
 import { getSheetData, getSheetLastUpdate } from '../../lib/sheet/google-sheets';
 import { mapSheetDataRefugee } from '@/utils/dataMapper';
-import { Refugee } from '@/components/refugee';
+import { Posko } from '@/components/posko';
 
 export const revalidate = 300;
 
@@ -15,7 +15,7 @@ export default async function RefugeeDashboard() {
 
   return (
     <main className="min-h-screen bg-background">
-      <Refugee initialData={initialData} lastUpdate={lastUpdate} />
+      <Posko initialData={initialData} lastUpdate={lastUpdate} />
     </main>
   );
 }

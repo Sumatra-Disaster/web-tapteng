@@ -18,13 +18,15 @@ import { DisasterData } from '@/interfaces/DisasterData';
 import { useRouter } from 'next/navigation';
 import { Footer } from './footer';
 import { Button } from './ui/button';
+import { Header } from './header';
 
 interface DisasterDashboardProps {
   initialData: DisasterData[];
   lastUpdate: any;
+  totalPosko: number;
 }
 
-export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboardProps) {
+export function DisasterDashboard({ initialData, lastUpdate, totalPosko }: DisasterDashboardProps) {
   const [data] = useState<DisasterData[]>(initialData);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -100,17 +102,38 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
       description: 'Perkiraan jiwa terdampak',
     },
     {
+      label: 'Posko',
+      value: totalPosko || 0,
+      description: 'Posko pengungsian',
+      navigateTo: '/posko',
+    },
+    {
       label: 'Pengungsi',
       value: totals.pengungsi,
       description: 'Total Pengungsi yang tercatat',
+      navigateTo: '/daftar-pengungsi',
+      highlight: 'yellow',
     },
     {
       label: 'Korban Meninggal',
       value: totals.meninggal,
       description: 'Lihat daftar korban',
-      highlight: true,
+      navigateTo: '/daftar-korban',
+      highlight: 'red',
     },
   ];
+
+  const getCardStyle = (stat: any) => {
+    if (stat.highlight === 'red')
+      return 'border-destructive/40 bg-destructive/5 shadow-sm hover:cursor-pointer';
+
+    if (stat.highlight === 'yellow')
+      return 'border-yellow-400/40 bg-yellow-400/5 shadow-sm hover:cursor-pointer';
+
+    if (stat.navigateTo) return 'hover:bg-muted/50 cursor-pointer transition';
+
+    return '';
+  };
 
   return (
     <div className="container mx-auto max-w-6xl py-10 px-4 md:px-6">
@@ -122,37 +145,7 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
       </a>
 
       <div className="flex flex-col gap-10">
-        <header className="flex flex-col items-center gap-6 text-center">
-          <img
-            src="https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/b5126efa-e9a0-4cfd-9763-be836e0861ed/image/w=640,quality=90,fit=scale-down"
-            alt="Logo BPBD Kabupaten Tapanuli Tengah"
-            className="h-28 w-auto"
-            loading="lazy"
-          />
-          <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Informasi Resmi BPBD Tapanuli Tengah
-            </p>
-            <h1 className="text-3xl font-bold tracking-tight">
-              Data Bencana Banjir Bandang dan Longsor
-            </h1>
-            <p className="text-muted-foreground">
-              Update terakhir:{' '}
-              <span className="font-semibold">{lastUpdateDate || 'Tanggal tidak tersedia'}</span>
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-muted-foreground">
-            <Button variant="secondary" onClick={() => router.push('/daftar-korban')}>
-              Lihat daftar korban meninggal
-            </Button>
-            <Button variant="destructive" asChild>
-              <a href="tel:081290900222" aria-label="Hubungi call center darurat">
-                <PhoneCall />
-                Hubungi BPBD TapTeng
-              </a>
-            </Button>
-          </div>
-        </header>
+        <Header lastUpdateDate={lastUpdateDate} showActions={true} />
 
         {/* Summary Cards */}
         <section
@@ -160,62 +153,30 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
           aria-live="polite"
         >
           {statCards.map((stat) => {
-            const isPengungsi = stat.label === 'Pengungsi';
-            const isKorbanMeninggal = stat.highlight;
-            const clickable = isPengungsi || isKorbanMeninggal;
-
-            const handleClick = () => {
-              if (isKorbanMeninggal) {
-                router.push('/daftar-korban');
-              } else if (isPengungsi) {
-                router.push('/daftar-pengungsi');
-              }
-            };
+            const isClickable = !!stat.navigateTo;
 
             return (
               <Card
                 key={stat.label}
-                className={
-                  stat.highlight
-                    ? 'border-destructive/40 bg-destructive/5 shadow-sm hover:cursor-pointer'
-                    : isPengungsi
-                      ? 'border-yellow-400/40 bg-yellow-400/5 shadow-sm hover:cursor-pointer'
-                      : clickable
-                        ? 'hover:cursor-pointer'
-                        : ''
-                }
-                role={clickable ? 'button' : undefined}
-                tabIndex={clickable ? 0 : undefined}
-                onClick={clickable ? handleClick : undefined}
-                onKeyDown={
-                  clickable
-                    ? (event) => {
-                        if (event.key === 'Enter' || event.key === ' ') {
-                          event.preventDefault();
-                          handleClick();
-                        }
-                      }
-                    : undefined
-                }
-                aria-label={
-                  isKorbanMeninggal
-                    ? 'Buka daftar korban meninggal'
-                    : isPengungsi
-                      ? 'Buka daftar pengungsi'
-                      : undefined
-                }
+                className={getCardStyle(stat)}
+                onClick={isClickable ? () => router.push(stat.navigateTo!) : undefined}
+                role={isClickable ? 'button' : undefined}
+                tabIndex={isClickable ? 0 : undefined}
               >
                 <CardHeader className="space-y-1">
                   <CardDescription className="text-xs uppercase tracking-wide text-muted-foreground">
                     {stat.label}
                   </CardDescription>
+
                   <CardTitle
-                    className={`text-3xl font-bold ${
-                      stat.highlight ? 'text-destructive' : isPengungsi ? 'text-yellow-500' : ''
-                    }`}
+                    className={`text-3xl font-bold
+                      ${stat.highlight === 'red' ? 'text-destructive' : ''}
+                      ${stat.highlight === 'yellow' ? 'text-yellow-500' : ''}
+                    `}
                   >
                     {formatNumber(stat.value)}
                   </CardTitle>
+
                   <p className="text-xs text-muted-foreground">{stat.description}</p>
                 </CardHeader>
               </Card>

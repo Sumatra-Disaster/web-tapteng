@@ -16,6 +16,7 @@ import { Search, ArrowLeft } from 'lucide-react';
 import { EvacueeData } from '@/interfaces/DisasterData';
 import { Footer } from './footer';
 import { Button } from '@/components/ui/button';
+import { Header } from './header';
 
 interface EvacueesProps {
   initialData: EvacueeData[];
@@ -64,24 +65,7 @@ export function Evacuees({ initialData, lastUpdate }: EvacueesProps) {
           Kembali ke beranda
         </Button>
 
-        <header className="flex flex-col items-center gap-6 text-center">
-          <img
-            src="https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/b5126efa-e9a0-4cfd-9763-be836e0861ed/image/w=640,quality=90,fit=scale-down"
-            alt="Logo BPBD Kabupaten Tapanuli Tengah"
-            className="h-28 w-auto"
-            loading="lazy"
-          />
-          <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Informasi Resmi BPBD Tapanuli Tengah
-            </p>
-            <h1 className="text-3xl font-bold tracking-tight">Daftar Pengungsi</h1>
-            <p className="text-muted-foreground">
-              Update terakhir:{' '}
-              <span className="font-semibold">{lastUpdateDate || 'Tanggal tidak tersedia'}</span>
-            </p>
-          </div>
-        </header>
+        <Header lastUpdateDate={lastUpdateDate} showActions={false} />
 
         {/* Search */}
         <section

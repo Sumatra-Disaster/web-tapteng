@@ -11,9 +11,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Card, CardContent } from '@/components/ui/card';
-import { Search, ChevronDown, ChevronRight } from 'lucide-react';
-import { Footer } from '../footer';
+import { Search, ChevronDown, ChevronRight, ArrowLeft } from 'lucide-react';
+import { Footer } from './footer';
 import { useRouter } from 'next/navigation';
+import { Header } from './header';
+import { Button } from './ui/button';
 
 export interface RefugeePosko {
   no: number;
@@ -34,8 +36,7 @@ interface RefugeeProps {
   lastUpdate: any;
 }
 
-export function Refugee({ initialData, lastUpdate }: RefugeeProps) {
-  console.log('Initial Data:', initialData);
+export function Posko({ initialData, lastUpdate }: RefugeeProps) {
   const [data] = useState<RefugeeData>(initialData);
   const [searchTerm, setSearchTerm] = useState('');
   const [openKecamatan, setOpenKecamatan] = useState<Record<string, boolean>>({});
@@ -105,29 +106,24 @@ export function Refugee({ initialData, lastUpdate }: RefugeeProps) {
   const handleRowClick = (nama: string, jumlah: string) => {
     // Only navigate if jumlah > 0
     if (parseInt(jumlah) > 0) {
-      router.push(`/pengungsi/${slugify(nama)}`);
+      router.push(`/daftar-pengungsi`);
     }
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 md:px-6">
-      <div className="flex flex-col gap-6">
-        {/* Logo */}
-        <div className="flex justify-center items-center">
-          <img
-            src="https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/b5126efa-e9a0-4cfd-9763-be836e0861ed/image/w=640,quality=90,fit=scale-down"
-            alt="Logo"
-            className="h-42 mb-12"
-          />
-        </div>
+    <div className="container mx-auto max-w-6xl py-10 px-4 md:px-6">
+      <div className="flex flex-col gap-8">
+        <Button
+          variant="ghost"
+          onClick={() => router.push('/')}
+          className="w-fit gap-2 px-0 text-sm font-medium text-muted-foreground hover:text-foreground"
+          aria-label="Kembali ke halaman utama"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden />
+          Kembali ke beranda
+        </Button>
 
-        {/* Header */}
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Posko Pengungsian</h1>
-          <p className="text-muted-foreground text-sm md:text-base">
-            Update Terakhir : {lastUpdateDate || 'Tanggal tidak tersedia'}
-          </p>
-        </div>
+        <Header lastUpdateDate={lastUpdateDate} showActions={false} />
 
         {/* Search */}
         <div className="relative">
