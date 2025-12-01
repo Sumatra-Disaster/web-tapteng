@@ -176,23 +176,6 @@ Project ini menggunakan [Conventional Commits](https://www.conventionalcommits.o
 - `test:` - Adding tests
 - `chore:` - Maintenance tasks
 
-## 📄 License
-
-[Add your license here]
-
-## 👥 Authors
-
-- **[Amril](https://github.com/iamrils)** - I Am Amril
-- **[Andre Pratama](https://github.com/andreepratama27)** - Front-End Engineer
-- **[Sastra Nababan](https://github.com/SastraNababan)** - Open Source Enthusiast & Community Leader
-
-## 🙏 Acknowledgments
-
-- [Next.js](https://nextjs.org/)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [Radix UI](https://www.radix-ui.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-
 ---
 
 **Note**: Pastikan untuk menjaga keamanan credentials Google Sheets dan tidak commit file `.env.local` ke repository.

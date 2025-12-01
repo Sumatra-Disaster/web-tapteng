@@ -39,14 +39,15 @@ export function mapSheetData(sheetData: SheetValues): DisasterData[] {
         meninggal: cleanNumber(row[3]),
         luka: cleanNumber(row[4]),
         hilang: cleanNumber(row[5]),
-        pengungsi_di_luar_pandan: cleanNumber(row[6]),
-        terdampak: cleanNumber(row[7]),
-        rumah_rusak_ringan: cleanNumber(row[8]),
-        rumah_rusak_sedang: cleanNumber(row[9]),
-        rumah_rusak_berat: cleanNumber(row[10]),
-        sekolah_rusak_ringan: cleanNumber(row[11]),
-        sekolah_rusak_sedang: cleanNumber(row[12]),
-        sekolah_rusak_berat: cleanNumber(row[13]),
+        belum_ter_evakuasi: cleanNumber(row[6]),
+        pengungsi_di_luar_pandan: cleanNumber(row[7]),
+        terdampak: cleanNumber(row[8]),
+        rumah_rusak_ringan: cleanNumber(row[9]),
+        rumah_rusak_sedang: cleanNumber(row[10]),
+        rumah_rusak_berat: cleanNumber(row[11]),
+        sekolah_rusak_ringan: cleanNumber(row[12]),
+        sekolah_rusak_sedang: cleanNumber(row[13]),
+        sekolah_rusak_berat: cleanNumber(row[14]),
       };
     })
     .filter((record): record is DisasterData => record !== null);
