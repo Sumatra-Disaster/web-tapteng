@@ -135,10 +135,11 @@ Untuk mengubah spreadsheet, edit file-file tersebut.
 
 ## 🔧 Environment Variables
 
-| Variable                     | Description                             | Required |
-| ---------------------------- | --------------------------------------- | -------- |
-| `GOOGLE_SHEETS_CLIENT_EMAIL` | Service account email dari Google Cloud | ✅       |
-| `GOOGLE_SHEETS_PRIVATE_KEY`  | Private key dari service account        | ✅       |
+| Variable                        | Description                             | Required |
+| ------------------------------- | --------------------------------------- | -------- |
+| `GOOGLE_SHEETS_CLIENT_EMAIL`    | Service account email dari Google Cloud | ✅       |
+| `GOOGLE_SHEETS_PRIVATE_KEY`     | Private key dari service account        | ✅       |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics Measurement ID (GA4)   | ❌       |
 
 ## 🚢 Deployment
 

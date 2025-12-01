@@ -55,9 +55,9 @@ export function DeceasedVictims({ initialData, lastUpdate }: DeceasedVictimsProp
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-destructive/10 p-2">
+            {/* <div className="rounded-lg bg-destructive/10 p-2">
               <AlertTriangle className="h-6 w-6 text-destructive" />
-            </div>
+            </div> */}
             <div>
               <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
                 Daftar Korban Meninggal
