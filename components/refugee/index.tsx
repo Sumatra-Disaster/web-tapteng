@@ -22,17 +22,21 @@ export interface RefugeePosko {
 }
 
 export interface RefugeeData {
-  kecamatan: string;
-  posko: RefugeePosko[];
+  post: {
+    kecamatan: string;
+    posko: RefugeePosko[];
+  }[];
+  total: number;
 }
 
 interface RefugeeProps {
-  initialData: RefugeeData[];
+  initialData: RefugeeData;
   lastUpdate: any;
 }
 
 export function Refugee({ initialData, lastUpdate }: RefugeeProps) {
-  const [data] = useState<RefugeeData[]>(initialData);
+  console.log('Initial Data:', initialData);
+  const [data] = useState<RefugeeData>(initialData);
   const [searchTerm, setSearchTerm] = useState('');
   const [openKecamatan, setOpenKecamatan] = useState<Record<string, boolean>>({});
   const [defaultOpen, setDefaultOpen] = useState<Record<string, boolean>>({});
@@ -49,7 +53,7 @@ export function Refugee({ initialData, lastUpdate }: RefugeeProps) {
   const filteredData = useMemo(() => {
     const s = searchTerm.toLowerCase();
 
-    return data
+    return data.post
       .map((item) => {
         const poskoFiltered = item.posko.filter(
           (p) =>
@@ -90,7 +94,7 @@ export function Refugee({ initialData, lastUpdate }: RefugeeProps) {
 
   useEffect(() => {
     const all: Record<string, boolean> = {};
-    data.forEach((item) => {
+    data.post.forEach((item) => {
       all[item.kecamatan] = true;
     });
 
@@ -199,6 +203,9 @@ export function Refugee({ initialData, lastUpdate }: RefugeeProps) {
                     )}
                   </div>
                 ))}
+                <div className="p-4 border-t flex justify-end">
+                  <span className="font-bold text-lg">{`Total Pengungsi: ${data.total.toLocaleString()}`}</span>
+                </div>
               </div>
             </CardContent>
           </Card>

@@ -87,18 +87,20 @@ export function mapSheetDataDeceased(sheetData: SheetValues): DeceasedData[] {
     .filter((record): record is DeceasedData => record !== null);
 }
 
-export function mapSheetDataRefugee(sheetData: SheetValues): any[] {
-  const result: any[] = [];
-
+export function mapSheetDataRefugee(sheetData: SheetValues): {
+  post: any[];
+  total: number;
+} {
+  const post: any[] = [];
   let currentKecamatan = '';
+  let total = 0;
 
   for (const row of sheetData) {
     const [kecamatanCol, noCol, namaCol, jumlahCol] = row;
 
     if (kecamatanCol && kecamatanCol.trim() !== '') {
       currentKecamatan = kecamatanCol.trim();
-
-      result.push({
+      post.push({
         kecamatan: currentKecamatan,
         posko: [],
       });
@@ -106,14 +108,22 @@ export function mapSheetDataRefugee(sheetData: SheetValues): any[] {
 
     if (!currentKecamatan) continue;
 
-    const poskoItem = {
-      no: Number(noCol),
-      nama: namaCol?.trim() ?? '',
-      jumlah: jumlahCol?.trim() ?? 'Belum diketahui',
-    };
+    const nama = namaCol?.trim() ?? '';
+    const no = Number(noCol);
+    const jumlah = jumlahCol?.trim() ?? 'Belum diketahui';
 
-    result[result.length - 1].posko.push(poskoItem);
+    if (nama.toLowerCase() === 'total' || no === 0) {
+      continue;
+    }
+
+    const poskoItem = { no, nama, jumlah };
+    post[post.length - 1].posko.push(poskoItem);
+
+    const parsed = parseInt(jumlah);
+    if (!isNaN(parsed)) {
+      total += parsed;
+    }
   }
 
-  return result;
+  return { post, total };
 }
