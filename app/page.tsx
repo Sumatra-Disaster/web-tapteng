@@ -3,7 +3,11 @@ import { getSheetData, getSheetLastUpdate } from '../lib/sheet/google-sheets';
 import { mapSheetData } from '@/utils/dataMapper';
 
 export default async function Home() {
-  const spreadsheetId = '11lz-JRqZm7nRt1Ya4ARFPFv4MoMEn72G2ChoaBsewaI';
+  const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+
+  if (!spreadsheetId) {
+    throw new Error('Missing GOOGLE_SHEETS_SPREADSHEET_ID environment variable.');
+  }
 
   // Get last update time from spreadsheet file metadata
   const lastUpdate = await getSheetLastUpdate(spreadsheetId);

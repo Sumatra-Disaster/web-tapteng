@@ -57,6 +57,7 @@ Sebelum memulai, pastikan Anda telah menginstall:
    # Google Sheets API
    GOOGLE_SHEETS_CLIENT_EMAIL=your-service-account-email@project.iam.gserviceaccount.com
    GOOGLE_SHEETS_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+   GOOGLE_SHEETS_SPREADSHEET_ID=1eh29yJ4iDHpDgpn0WEaEje42bzWV5M6OHKxUo7F4KMc
    ```
 
 4. **Setup Google Sheets API**
@@ -135,11 +136,12 @@ Untuk mengubah spreadsheet, edit file-file tersebut.
 
 ## 🔧 Environment Variables
 
-| Variable                        | Description                             | Required |
-| ------------------------------- | --------------------------------------- | -------- |
-| `GOOGLE_SHEETS_CLIENT_EMAIL`    | Service account email dari Google Cloud | ✅       |
-| `GOOGLE_SHEETS_PRIVATE_KEY`     | Private key dari service account        | ✅       |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics Measurement ID (GA4)   | ❌       |
+| Variable                        | Description                                          | Required |
+| ------------------------------- | ---------------------------------------------------- | -------- |
+| `GOOGLE_SHEETS_CLIENT_EMAIL`    | Service account email dari Google Cloud              | ✅       |
+| `GOOGLE_SHEETS_PRIVATE_KEY`     | Private key dari service account                     | ✅       |
+| `GOOGLE_SHEETS_SPREADSHEET_ID`  | ID Google Sheets sumber data (boleh bersifat publik) | ✅       |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics Measurement ID (GA4)                | ❌       |
 
 ## 🚢 Deployment
 
