@@ -6,6 +6,7 @@ export interface DisasterData {
   meninggal: number;
   luka: number;
   hilang: number;
+  belum_ter_evakuasi: number;
   pengungsi_di_luar_pandan: number;
   terdampak: number;
   rumah_rusak_ringan: number;

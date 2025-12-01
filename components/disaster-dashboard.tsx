@@ -39,7 +39,8 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
         item.jumlah_penduduk.toString().includes(search) ||
         item.meninggal.toString().includes(search) ||
         item.luka.toString().includes(search) ||
-        item.hilang.toString().includes(search)
+        item.hilang.toString().includes(search) ||
+        item.belum_ter_evakuasi.toString().includes(search)
       );
     });
   }, [data, searchTerm]);
@@ -52,6 +53,7 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
         meninggal: acc.meninggal + item.meninggal,
         luka: acc.luka + item.luka,
         hilang: acc.hilang + item.hilang,
+        belum_ter_evakuasi: acc.belum_ter_evakuasi + item.belum_ter_evakuasi,
         pengungsi: acc.pengungsi + item.pengungsi_di_luar_pandan,
         terdampak: acc.terdampak + item.terdampak,
         rumah_ringan: acc.rumah_ringan + item.rumah_rusak_ringan,
@@ -66,6 +68,7 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
         meninggal: 0,
         luka: 0,
         hilang: 0,
+        belum_ter_evakuasi: 0,
         pengungsi: 0,
         terdampak: 0,
         rumah_ringan: 0,
@@ -113,7 +116,24 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
             <CardHeader className="pb-2">
               <CardDescription className="text-xs">Total Penduduk</CardDescription>
               <CardTitle className="text-2xl md:text-3xl">
-                {totals.jumlah_penduduk.toLocaleString()}
+                {totals.jumlah_penduduk.toLocaleString('id-ID')}
+              </CardTitle>
+            </CardHeader>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs">Terdampak</CardDescription>
+              <CardTitle className="text-2xl md:text-3xl">
+                {totals.terdampak.toLocaleString('id-ID')}
+              </CardTitle>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs">Pengungsi</CardDescription>
+              <CardTitle className="text-2xl md:text-3xl">
+                {totals.pengungsi.toLocaleString('id-ID')}
               </CardTitle>
             </CardHeader>
           </Card>
@@ -131,22 +151,6 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
               <div className="absolute right-4 top-1/2 -translate-y-1/2">
                 <ArrowRight className="h-8 w-8 text-destructive" />
               </div>
-            </CardHeader>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs">Terdampak</CardDescription>
-              <CardTitle className="text-2xl md:text-3xl">
-                {totals.terdampak.toLocaleString()}
-              </CardTitle>
-            </CardHeader>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs">Pengungsi</CardDescription>
-              <CardTitle className="text-2xl md:text-3xl">
-                {totals.pengungsi.toLocaleString()}
-              </CardTitle>
             </CardHeader>
           </Card>
         </div>
@@ -190,6 +194,11 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
                       <span className="text-xs font-normal text-muted-foreground">(JIWA)</span>
                     </TableHead>
                     <TableHead className="text-right font-semibold min-w-[120px]">
+                      BELUM TER-EVAKUASI
+                      <br />
+                      <span className="text-xs font-normal text-muted-foreground">(JIWA)</span>
+                    </TableHead>
+                    <TableHead className="text-right font-semibold min-w-[120px]">
                       PENGUNGSI
                       <br />
                       <span className="text-xs font-normal text-muted-foreground">(JIWA)</span>
@@ -207,7 +216,7 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
                     </TableHead>
                   </TableRow>
                   <TableRow className="bg-muted/30">
-                    <TableHead colSpan={8}></TableHead>
+                    <TableHead colSpan={9}></TableHead>
                     <TableHead className="text-center text-xs">RINGAN</TableHead>
                     <TableHead className="text-center text-xs">SEDANG</TableHead>
                     <TableHead className="text-center text-xs">BERAT</TableHead>
@@ -222,46 +231,65 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
                       <TableCell className="font-medium">{item.no}</TableCell>
                       <TableCell className="font-medium">{item.kecamatan}</TableCell>
                       <TableCell className="text-right">
-                        {item.jumlah_penduduk.toLocaleString()}
+                        {item.jumlah_penduduk.toLocaleString('id-ID')}
                       </TableCell>
                       <TableCell className="text-right">
                         {item.meninggal > 0 ? (
-                          <span className="font-semibold text-destructive">{item.meninggal}</span>
+                          <span className="font-semibold text-destructive">
+                            {item.meninggal.toLocaleString('id-ID')}
+                          </span>
                         ) : (
                           '-'
                         )}
                       </TableCell>
                       <TableCell className="text-right">
-                        {item.luka > 0 ? item.luka : '-'}
+                        {item.luka > 0 ? item.luka.toLocaleString('id-ID') : '-'}
                       </TableCell>
                       <TableCell className="text-right">
-                        {item.hilang > 0 ? item.hilang : '-'}
+                        {item.hilang > 0 ? item.hilang.toLocaleString('id-ID') : '-'}
                       </TableCell>
                       <TableCell className="text-right">
-                        {item.pengungsi_di_luar_pandan > 0
-                          ? item.pengungsi_di_luar_pandan.toLocaleString()
+                        {item.belum_ter_evakuasi > 0
+                          ? item.belum_ter_evakuasi.toLocaleString('id-ID')
                           : '-'}
                       </TableCell>
                       <TableCell className="text-right">
-                        {item.terdampak.toLocaleString()}
+                        {item.pengungsi_di_luar_pandan > 0
+                          ? item.pengungsi_di_luar_pandan.toLocaleString('id-ID')
+                          : '-'}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {item.terdampak.toLocaleString('id-ID')}
                       </TableCell>
                       <TableCell className="text-center">
-                        {item.rumah_rusak_ringan > 0 ? item.rumah_rusak_ringan : '-'}
+                        {item.rumah_rusak_ringan > 0
+                          ? item.rumah_rusak_ringan.toLocaleString('id-ID')
+                          : '-'}
                       </TableCell>
                       <TableCell className="text-center">
-                        {item.rumah_rusak_sedang > 0 ? item.rumah_rusak_sedang : '-'}
+                        {item.rumah_rusak_sedang > 0
+                          ? item.rumah_rusak_sedang.toLocaleString('id-ID')
+                          : '-'}
                       </TableCell>
                       <TableCell className="text-center">
-                        {item.rumah_rusak_berat > 0 ? item.rumah_rusak_berat : '-'}
+                        {item.rumah_rusak_berat > 0
+                          ? item.rumah_rusak_berat.toLocaleString('id-ID')
+                          : '-'}
                       </TableCell>
                       <TableCell className="text-center">
-                        {item.sekolah_rusak_ringan > 0 ? item.sekolah_rusak_ringan : '-'}
+                        {item.sekolah_rusak_ringan > 0
+                          ? item.sekolah_rusak_ringan.toLocaleString('id-ID')
+                          : '-'}
                       </TableCell>
                       <TableCell className="text-center">
-                        {item.sekolah_rusak_sedang > 0 ? item.sekolah_rusak_sedang : '-'}
+                        {item.sekolah_rusak_sedang > 0
+                          ? item.sekolah_rusak_sedang.toLocaleString('id-ID')
+                          : '-'}
                       </TableCell>
                       <TableCell className="text-center">
-                        {item.sekolah_rusak_berat > 0 ? item.sekolah_rusak_berat : '-'}
+                        {item.sekolah_rusak_berat > 0
+                          ? item.sekolah_rusak_berat.toLocaleString('id-ID')
+                          : '-'}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -269,25 +297,44 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
                   <TableRow className="bg-primary/5 font-semibold border-t-2">
                     <TableCell colSpan={2}>TOTAL</TableCell>
                     <TableCell className="text-right">
-                      {totals.jumlah_penduduk.toLocaleString()}
+                      {totals.jumlah_penduduk.toLocaleString('id-ID')}
                     </TableCell>
                     <TableCell className="text-right text-destructive">
-                      {totals.meninggal}
-                    </TableCell>
-                    <TableCell className="text-right">{totals.luka}</TableCell>
-                    <TableCell className="text-right">{totals.hilang}</TableCell>
-                    <TableCell className="text-right">
-                      {totals.pengungsi.toLocaleString()}
+                      {totals.meninggal.toLocaleString('id-ID')}
                     </TableCell>
                     <TableCell className="text-right">
-                      {totals.terdampak.toLocaleString()}
+                      {totals.luka.toLocaleString('id-ID')}
                     </TableCell>
-                    <TableCell className="text-center">{totals.rumah_ringan}</TableCell>
-                    <TableCell className="text-center">{totals.rumah_sedang}</TableCell>
-                    <TableCell className="text-center">{totals.rumah_berat}</TableCell>
-                    <TableCell className="text-center">{totals.sekolah_ringan}</TableCell>
-                    <TableCell className="text-center">{totals.sekolah_sedang}</TableCell>
-                    <TableCell className="text-center">{totals.sekolah_berat}</TableCell>
+                    <TableCell className="text-right">
+                      {totals.hilang.toLocaleString('id-ID')}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {totals.belum_ter_evakuasi.toLocaleString('id-ID')}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {totals.pengungsi.toLocaleString('id-ID')}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {totals.terdampak.toLocaleString('id-ID')}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {totals.rumah_ringan.toLocaleString('id-ID')}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {totals.rumah_sedang.toLocaleString('id-ID')}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {totals.rumah_berat.toLocaleString('id-ID')}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {totals.sekolah_ringan.toLocaleString('id-ID')}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {totals.sekolah_sedang.toLocaleString('id-ID')}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {totals.sekolah_berat.toLocaleString('id-ID')}
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
