@@ -90,10 +90,12 @@ export function mapSheetDataDeceased(sheetData: SheetValues): DeceasedData[] {
 export function mapSheetDataRefugee(sheetData: SheetValues): {
   post: any[];
   total: number;
+  totalPosko: number;
 } {
   const post: any[] = [];
   let currentKecamatan = '';
   let total = 0;
+  let totalPosko = 0;
 
   for (const row of sheetData) {
     const [kecamatanCol, noCol, namaCol, jumlahCol] = row;
@@ -116,6 +118,10 @@ export function mapSheetDataRefugee(sheetData: SheetValues): {
       continue;
     }
 
+    if (nama.toLowerCase() !== 'total') {
+      totalPosko += 1;
+    }
+
     const poskoItem = { no, nama, jumlah };
     post[post.length - 1].posko.push(poskoItem);
 
@@ -125,7 +131,7 @@ export function mapSheetDataRefugee(sheetData: SheetValues): {
     }
   }
 
-  return { post, total };
+  return { post, total, totalPosko };
 }
 
 export function mapSheetDataEvacuee(sheetData: SheetValues, location: string): EvacueeData[] {
