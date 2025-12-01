@@ -101,7 +101,7 @@ export function DisasterDashboard({ initialData, lastUpdate }: DisasterDashboard
             </div>
             <div>
               <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-                Data Bencana Banjir Bandang dan Longsor
+                Data Bencana Banjir Bandang dan Longsor Tapanuli Tengah
               </h1>
               <p className="text-muted-foreground text-sm md:text-base">
                 Update Terakhir : {lastUpdateDate || 'Tanggal tidak tersedia'}
