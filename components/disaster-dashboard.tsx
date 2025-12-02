@@ -191,7 +191,7 @@ export function DisasterDashboard({ initialData, lastUpdate, totalPosko }: Disas
     {
       label: 'Pengungsi',
       value: totals.pengungsi,
-      description: 'Lihat Data Pengungsi →',
+      description: 'Lihat data pengungsi →',
       navigateTo: '/daftar-pengungsi',
       highlight: 'yellow',
     },
@@ -226,7 +226,11 @@ export function DisasterDashboard({ initialData, lastUpdate, totalPosko }: Disas
       </a>
 
       <div className="flex flex-col gap-10">
-        <Header lastUpdateDate={lastUpdateDate} showActions={true} />
+        <Header
+          lastUpdateDate={lastUpdateDate}
+          showActions={true}
+          title="Data Bencana Banjir Bandang dan Longsor"
+        />
 
         {/* Refresh Button */}
         <div className="flex justify-end">

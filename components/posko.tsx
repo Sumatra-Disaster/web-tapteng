@@ -117,7 +117,11 @@ export function Posko({ initialData, lastUpdate }: RefugeeProps) {
           Kembali ke beranda
         </Button>
 
-        <Header lastUpdateDate={lastUpdateDate} showActions={false} />
+        <Header
+          lastUpdateDate={lastUpdateDate}
+          showActions={false}
+          title="Daftar Posko Pengungsi"
+        />
 
         {/* Search */}
         <div className="relative">

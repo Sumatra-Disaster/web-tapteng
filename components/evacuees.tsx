@@ -65,7 +65,7 @@ export function Evacuees({ initialData, lastUpdate }: EvacueesProps) {
           Kembali ke beranda
         </Button>
 
-        <Header lastUpdateDate={lastUpdateDate} showActions={false} />
+        <Header lastUpdateDate={lastUpdateDate} showActions={false} title="Daftar Pengungsi" />
 
         {/* Search */}
         <section

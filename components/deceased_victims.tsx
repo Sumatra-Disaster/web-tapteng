@@ -17,6 +17,7 @@ import { Search, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { DeceasedData } from '@/interfaces/DisasterData';
 import { Footer } from './footer';
 import { Button } from './ui/button';
+import { Header } from './header';
 
 interface DeceasedVictimsProps {
   initialData: DeceasedData[];
@@ -75,24 +76,11 @@ export function DeceasedVictims({ initialData, lastUpdate }: DeceasedVictimsProp
           Kembali ke beranda
         </Button>
 
-        <header className="flex flex-col items-center gap-6 text-center">
-          <img
-            src="/logo-tapteng.png"
-            alt="Logo BPBD Kabupaten Tapanuli Tengah"
-            className="h-28 w-auto"
-            loading="lazy"
-          />
-          <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Informasi Resmi BPBD Tapanuli Tengah
-            </p>
-            <h1 className="text-3xl font-bold tracking-tight">Daftar Korban Meninggal</h1>
-            <p className="text-muted-foreground">
-              Update terakhir:{' '}
-              <span className="font-semibold">{lastUpdateDate || 'Tanggal tidak tersedia'}</span>
-            </p>
-          </div>
-        </header>
+        <Header
+          lastUpdateDate={lastUpdateDate}
+          showActions={false}
+          title="Daftar Korban Meninggal"
+        />
 
         {/* Search */}
         <section

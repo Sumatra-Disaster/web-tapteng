@@ -7,9 +7,10 @@ import { useRouter } from 'next/navigation';
 interface HeaderProps {
   lastUpdateDate: string | null;
   showActions?: boolean;
+  title: string;
 }
 
-export function Header({ lastUpdateDate, showActions = false }: HeaderProps) {
+export function Header({ lastUpdateDate, showActions = false, title }: HeaderProps) {
   const router = useRouter();
 
   const handleNavigateToVictims = () => {
@@ -32,9 +33,7 @@ export function Header({ lastUpdateDate, showActions = false }: HeaderProps) {
           Informasi Resmi BPBD Tapanuli Tengah
         </p>
 
-        <h1 className="text-3xl font-bold tracking-tight">
-          Data Bencana Banjir Bandang dan Longsor
-        </h1>
+        <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
 
         <p className="text-muted-foreground">
           Update terakhir:{' '}
