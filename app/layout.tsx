@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/next';
 import { Inter } from 'next/font/google';
 import { GoogleAnalytics } from '@/components/google-analytics';
+import { ServiceWorkerRegister } from '@/components/service-worker-register';
+import { InstallPrompt } from '@/components/install-prompt';
 import './globals.css';
 
 const inter = Inter({
@@ -62,10 +64,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="id">
       <body className={`${inter.variable} font-sans antialiased`}>
         <GoogleAnalytics />
+        <ServiceWorkerRegister />
         {children}
+        <InstallPrompt />
         <Analytics />
       </body>
     </html>

@@ -77,7 +77,7 @@ export function DeceasedVictims({ initialData, lastUpdate }: DeceasedVictimsProp
 
         <header className="flex flex-col items-center gap-6 text-center">
           <img
-            src="https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/b5126efa-e9a0-4cfd-9763-be836e0861ed/image/w=640,quality=90,fit=scale-down"
+            src="/logo-tapteng.png"
             alt="Logo BPBD Kabupaten Tapanuli Tengah"
             className="h-28 w-auto"
             loading="lazy"

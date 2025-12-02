@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import {
   Table,
@@ -13,12 +13,12 @@ import {
   TableFooter,
 } from '@/components/ui/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { PhoneCall, Search } from 'lucide-react';
+import { Search, RefreshCw } from 'lucide-react';
 import { DisasterData } from '@/interfaces/DisasterData';
 import { useRouter } from 'next/navigation';
 import { Footer } from './footer';
-import { Button } from './ui/button';
 import { Header } from './header';
+import { getRefreshInterval, getStaleThreshold, shouldRefreshOnVisibility } from '@/lib/config';
 
 interface DisasterDashboardProps {
   initialData: DisasterData[];
@@ -27,10 +27,91 @@ interface DisasterDashboardProps {
 }
 
 export function DisasterDashboard({ initialData, lastUpdate, totalPosko }: DisasterDashboardProps) {
-  const [data] = useState<DisasterData[]>(initialData);
+  const [data, setData] = useState<DisasterData[]>(initialData);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [currentLastUpdate, setCurrentLastUpdate] = useState<any>(lastUpdate);
+  const [currentTotalPosko, setCurrentTotalPosko] = useState<number>(totalPosko);
+  const [lastRefreshTime, setLastRefreshTime] = useState<number>(Date.now());
 
   const router = useRouter();
+
+  // Refresh function
+  const refreshData = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      const response = await fetch('/api/data', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        setData(result.data);
+        setCurrentLastUpdate(result.lastUpdate);
+        setCurrentTotalPosko(result.totalPosko || totalPosko);
+        setLastRefreshTime(Date.now());
+      }
+    } catch (error) {
+      console.error('Failed to refresh data:', error);
+      // Silently fail - keep using existing data
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [totalPosko]);
+
+  // Auto-refresh logic with configurable interval
+  useEffect(() => {
+    // Get refresh interval from config (can be overridden via environment variable)
+    const REFRESH_INTERVAL = getRefreshInterval();
+    const STALE_THRESHOLD = getStaleThreshold();
+    const REFRESH_ON_VISIBILITY = shouldRefreshOnVisibility();
+
+    // Check if data is stale on mount and refresh immediately if needed
+    const checkStaleOnMount = () => {
+      const timeSinceLastRefresh = Date.now() - lastRefreshTime;
+      if (timeSinceLastRefresh > STALE_THRESHOLD) {
+        refreshData();
+      }
+    };
+
+    // Initial stale check
+    checkStaleOnMount();
+
+    // Set up periodic refresh
+    const interval = setInterval(() => {
+      refreshData();
+    }, REFRESH_INTERVAL);
+
+    // Refresh when user returns to tab (visibility API) - if enabled
+    const handleVisibilityChange = () => {
+      if (REFRESH_ON_VISIBILITY && document.visibilityState === 'visible') {
+        // Check if data is stale (older than stale threshold)
+        const timeSinceLastRefresh = Date.now() - lastRefreshTime;
+        if (timeSinceLastRefresh > STALE_THRESHOLD) {
+          refreshData();
+        }
+      }
+    };
+
+    if (REFRESH_ON_VISIBILITY) {
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+    }
+
+    return () => {
+      clearInterval(interval);
+      if (REFRESH_ON_VISIBILITY) {
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      }
+    };
+  }, [refreshData, lastRefreshTime]);
 
   // Filter data based on search term
   const filteredData = useMemo(() => {
@@ -86,7 +167,7 @@ export function DisasterDashboard({ initialData, lastUpdate, totalPosko }: Disas
     );
   }, [filteredData]);
 
-  const lastUpdateDate = lastUpdate && lastUpdate[0] && lastUpdate[0][1];
+  const lastUpdateDate = currentLastUpdate && currentLastUpdate[0] && currentLastUpdate[0][1];
   const numberFormatter = useMemo(() => new Intl.NumberFormat('id-ID'), []);
   const formatNumber = (value: number) => numberFormatter.format(value);
 
@@ -103,7 +184,7 @@ export function DisasterDashboard({ initialData, lastUpdate, totalPosko }: Disas
     },
     {
       label: 'Posko',
-      value: totalPosko || 0,
+      value: currentTotalPosko || 0,
       description: 'Posko pengungsian',
       navigateTo: '/posko',
     },
@@ -146,6 +227,22 @@ export function DisasterDashboard({ initialData, lastUpdate, totalPosko }: Disas
 
       <div className="flex flex-col gap-10">
         <Header lastUpdateDate={lastUpdateDate} showActions={true} />
+
+        {/* Refresh Button */}
+        <div className="flex justify-end">
+          <button
+            onClick={refreshData}
+            disabled={isRefreshing}
+            className="flex items-center gap-2 rounded-lg border bg-background px-4 py-2 text-sm font-medium transition hover:bg-muted disabled:opacity-50"
+            aria-label="Refresh data"
+            title="Perbarui data"
+          >
+            <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <span className="sr-only md:not-sr-only">
+              {isRefreshing ? 'Memperbarui...' : 'Refresh Data'}
+            </span>
+          </button>
+        </div>
 
         {/* Summary Cards */}
         <section

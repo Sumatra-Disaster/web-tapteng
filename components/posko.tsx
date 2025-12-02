@@ -45,12 +45,6 @@ export function Posko({ initialData, lastUpdate }: RefugeeProps) {
 
   const lastUpdateDate = lastUpdate && lastUpdate[0] && lastUpdate[0][1];
 
-  const slugify = (text: string) =>
-    text
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)+/g, '');
-
   const filteredData = useMemo(() => {
     const s = searchTerm.toLowerCase();
 

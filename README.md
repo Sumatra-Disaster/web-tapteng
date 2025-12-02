@@ -13,7 +13,7 @@ Aplikasi web untuk menampilkan dan mengelola data bencana alam (banjir bandang d
 - 💀 **Daftar Korban Meninggal**: Halaman khusus untuk menampilkan daftar korban jiwa
 - 📱 **Responsive Design**: Tampilan yang optimal di berbagai perangkat
 - 🌓 **Dark Mode Support**: Dukungan tema gelap dan terang
-- 🔄 **Auto-refresh**: Data diperbarui secara otomatis dari Google Sheets
+- 🔄 **Auto-refresh**: Data diperbarui secara otomatis dari Google Sheets (dapat dikonfigurasi)
 - 📈 **Statistik Real-time**: Perhitungan total korban dan kerusakan secara real-time
 
 ## 🛠️ Tech Stack
@@ -93,6 +93,7 @@ disaster-tables/
 ├── interfaces/            # TypeScript interfaces
 │   └── DisasterData.ts
 ├── lib/                   # Utility libraries
+│   ├── config.ts          # Application configuration
 │   └── sheet/             # Google Sheets integration
 ├── public/                # Static assets
 ├── scripts/               # SQL scripts
@@ -135,11 +136,46 @@ Untuk mengubah spreadsheet, edit file-file tersebut.
 
 ## 🔧 Environment Variables
 
-| Variable                        | Description                             | Required |
-| ------------------------------- | --------------------------------------- | -------- |
-| `GOOGLE_SHEETS_CLIENT_EMAIL`    | Service account email dari Google Cloud | ✅       |
-| `GOOGLE_SHEETS_PRIVATE_KEY`     | Private key dari service account        | ✅       |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics Measurement ID (GA4)   | ❌       |
+### Required Variables
+
+| Variable                     | Description                             | Required |
+| ---------------------------- | --------------------------------------- | -------- |
+| `GOOGLE_SHEETS_CLIENT_EMAIL` | Service account email dari Google Cloud | ✅       |
+| `GOOGLE_SHEETS_PRIVATE_KEY`  | Private key dari service account        | ✅       |
+
+### Optional Variables
+
+| Variable                               | Description                                                                       | Default              |
+| -------------------------------------- | --------------------------------------------------------------------------------- | -------------------- |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID`        | Google Analytics Measurement ID (GA4)                                             | -                    |
+| `NEXT_PUBLIC_DATA_REFRESH_INTERVAL_MS` | Data refresh interval in milliseconds (min: 60000, max: 1800000)                  | `300000` (5 minutes) |
+| `NEXT_PUBLIC_DATA_STALE_THRESHOLD_MS`  | Stale data threshold in milliseconds (data older than this refreshes immediately) | `300000` (5 minutes) |
+| `NEXT_PUBLIC_REFRESH_ON_VISIBILITY`    | Enable refresh when user returns to tab (`true` or `false`)                       | `true`               |
+
+### Data Refresh Configuration
+
+Aplikasi ini memiliki sistem auto-refresh yang dapat dikonfigurasi melalui environment variables:
+
+- **`NEXT_PUBLIC_DATA_REFRESH_INTERVAL_MS`**: Interval refresh otomatis (dalam milidetik)
+  - Default: `300000` (5 menit)
+  - Minimum: `60000` (1 menit)
+  - Maximum: `1800000` (30 menit)
+  - Contoh: Set `60000` untuk refresh setiap 1 menit
+
+- **`NEXT_PUBLIC_DATA_STALE_THRESHOLD_MS`**: Threshold untuk data yang dianggap "stale"
+  - Default: `300000` (5 menit)
+  - Data yang lebih lama dari threshold ini akan di-refresh segera saat halaman dimuat atau tab menjadi visible
+
+- **`NEXT_PUBLIC_REFRESH_ON_VISIBILITY`**: Aktifkan refresh saat user kembali ke tab
+  - Default: `true`
+  - Set ke `false` untuk menonaktifkan fitur ini
+
+**Contoh konfigurasi untuk refresh lebih cepat (1 menit):**
+
+```env
+NEXT_PUBLIC_DATA_REFRESH_INTERVAL_MS=60000
+NEXT_PUBLIC_DATA_STALE_THRESHOLD_MS=60000
+```
 
 ## 🚢 Deployment
 
