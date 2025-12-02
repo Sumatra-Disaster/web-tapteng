@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import { GoogleAnalytics } from '@/components/google-analytics';
 import { ServiceWorkerRegister } from '@/components/service-worker-register';
 import { InstallPrompt } from '@/components/install-prompt';
+import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
 
 const inter = Inter({
@@ -66,11 +67,18 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <GoogleAnalytics />
-        <ServiceWorkerRegister />
-        {children}
-        <InstallPrompt />
-        <Analytics />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <GoogleAnalytics />
+          <ServiceWorkerRegister />
+          {children}
+          <InstallPrompt />
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );
