@@ -3,13 +3,10 @@ import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/next';
 import { Inter } from 'next/font/google';
 import { GoogleAnalytics } from '@/components/google-analytics';
+import { MicrosoftClarity } from '@/components/microsoft-clarity';
 import { ServiceWorkerRegister } from '@/components/service-worker-register';
 import { InstallPrompt } from '@/components/install-prompt';
-import Clarity from '@microsoft/clarity';
 import './globals.css';
-
-const projectId = process.env.NEXT_MS_CLARITY_PROJECT_ID as string;
-Clarity.init(projectId);
 
 const inter = Inter({
   subsets: ['latin'],
@@ -71,6 +68,7 @@ export default function RootLayout({
     <html lang="id">
       <body className={`${inter.variable} font-sans antialiased`}>
         <GoogleAnalytics />
+        <MicrosoftClarity />
         <ServiceWorkerRegister />
         {children}
         <InstallPrompt />
