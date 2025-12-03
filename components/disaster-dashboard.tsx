@@ -189,7 +189,7 @@ export function DisasterDashboard({
 
   const statCards = [
     {
-      label: 'Pengungsi',
+      label: 'Warga Mengungsi',
       value: totals.pengungsi,
       description: 'Lihat Data',
       navigateTo: '/daftar-pengungsi',

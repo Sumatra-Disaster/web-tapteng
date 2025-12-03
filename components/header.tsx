@@ -29,12 +29,12 @@ export function Header({ lastUpdateDate, showActions = false, title }: HeaderPro
 
       {/* Title & Meta Info */}
       <div className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Informasi Resmi{' '}
+        <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          <span>Informasi Resmi</span>
           <span className="font-semibold bg-yellow-500 text-white px-2 py-1 rounded-md">
             BPBD Tapanuli Tengah
           </span>
-        </p>
+        </div>
 
         <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
 
