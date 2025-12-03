@@ -14,11 +14,76 @@ const inter = Inter({
   display: 'swap',
 });
 
+// Get site URL from environment variable or use default
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://infobencanatapteng.vercel.app';
+
 export const metadata: Metadata = {
-  title: 'Data Bencana Banjir Bandang dan Longsor Tapanuli Tengah',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'Data Bencana Banjir Bandang dan Longsor Tapanuli Tengah',
+    template: '%s | BPBD Tapanuli Tengah',
+  },
   description:
-    'Sistem manajemen data bencana banjir bandang dan longsor untuk monitoring korban dan kerusakan infrastruktur',
-  generator: '',
+    'Sistem manajemen data bencana banjir bandang dan longsor untuk monitoring korban dan kerusakan infrastruktur di Kabupaten Tapanuli Tengah. Data resmi dari BPBD Kabupaten Tapanuli Tengah.',
+  keywords: [
+    'bencana tapteng',
+    'banjir bandang tapanuli tengah',
+    'longsor tapteng',
+    'BPBD tapteng',
+    'data bencana',
+    'korban bencana',
+    'pengungsi tapteng',
+    'bencana alam tapanuli tengah',
+    'informasi bencana',
+    'disaster management',
+  ],
+  authors: [{ name: 'BPBD Kabupaten Tapanuli Tengah' }],
+  creator: 'BPBD Kabupaten Tapanuli Tengah',
+  publisher: 'BPBD Kabupaten Tapanuli Tengah',
+  generator: 'Next.js',
+  applicationName: 'Info Bencana Tapteng',
+  referrer: 'origin-when-cross-origin',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'id_ID',
+    url: siteUrl,
+    siteName: 'Info Bencana Tapteng',
+    title: 'Data Bencana Banjir Bandang dan Longsor Tapanuli Tengah',
+    description:
+      'Sistem manajemen data bencana banjir bandang dan longsor untuk monitoring korban dan kerusakan infrastruktur di Kabupaten Tapanuli Tengah. Data resmi dari BPBD Kabupaten Tapanuli Tengah.',
+    images: [
+      {
+        url: '/logo-tapteng.png',
+        width: 1200,
+        height: 630,
+        alt: 'Logo BPBD Kabupaten Tapanuli Tengah',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Data Bencana Banjir Bandang dan Longsor Tapanuli Tengah',
+    description:
+      'Sistem manajemen data bencana banjir bandang dan longsor untuk monitoring korban dan kerusakan infrastruktur di Kabupaten Tapanuli Tengah.',
+    images: ['/logo-tapteng.png'],
+    creator: '@BPBDTapTeng',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: [
       {
@@ -57,6 +122,9 @@ export const metadata: Metadata = {
       },
     ],
   },
+  alternates: {
+    canonical: siteUrl,
+  },
 };
 
 export default function RootLayout({
@@ -64,8 +132,43 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Structured data for SEO
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'GovernmentService',
+    name: 'Data Bencana Banjir Bandang dan Longsor Tapanuli Tengah',
+    description:
+      'Sistem manajemen data bencana banjir bandang dan longsor untuk monitoring korban dan kerusakan infrastruktur di Kabupaten Tapanuli Tengah',
+    provider: {
+      '@type': 'GovernmentOrganization',
+      name: 'BPBD Kabupaten Tapanuli Tengah',
+      url: siteUrl,
+    },
+    serviceType: 'Disaster Management Information',
+    areaServed: {
+      '@type': 'City',
+      name: 'Tapanuli Tengah',
+      '@id': 'https://www.wikidata.org/wiki/Q123456', // Replace with actual Wikidata ID if available
+    },
+    audience: {
+      '@type': 'Audience',
+      audienceType: 'Public',
+    },
+    availableChannel: {
+      '@type': 'ServiceChannel',
+      serviceUrl: siteUrl,
+      serviceType: 'Online',
+    },
+  };
+
   return (
     <html lang="id">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <GoogleAnalytics />
         <MicrosoftClarity />

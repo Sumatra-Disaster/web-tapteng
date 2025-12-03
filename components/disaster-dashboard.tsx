@@ -390,7 +390,7 @@ export function DisasterDashboard({
               Geser ke samping untuk melihat seluruh kolom.
             </p>
           </div>
-          <Card className="py-0">
+          <Card className="py-0 rounded-none">
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <Table>
@@ -399,35 +399,41 @@ export function DisasterDashboard({
                   </TableCaption>
                   <TableHeader className="sticky top-0 z-10 bg-background/95 backdrop-blur">
                     <TableRow className="text-xs uppercase tracking-wide">
-                      <TableHead className="sticky left-0 z-20 w-16 p-3 font-semibold bg-background/95 backdrop-blur">
+                      <TableHead className="sticky left-0 z-40 w-[64px] p-3 font-semibold bg-background border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]">
                         No
                       </TableHead>
-                      <TableHead className="sticky left-16 z-20 min-w-[160px] font-semibold bg-background/95 backdrop-blur">
+                      <TableHead className="sticky left-[64px] z-40 min-w-[160px] p-3 font-semibold bg-background border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]">
                         Kecamatan
                       </TableHead>
-                      <TableHead className="min-w-[180px] text-right font-semibold whitespace-nowrap">
+                      <TableHead className="min-w-[180px] text-right font-semibold whitespace-nowrap relative z-0">
                         Jumlah Penduduk
                       </TableHead>
-                      <TableHead className="text-center font-semibold">
+                      <TableHead className="text-center font-semibold relative z-0">
                         <abbr title="Korban meninggal dunia">Meninggal</abbr>
                       </TableHead>
-                      <TableHead className="text-center font-semibold">Luka</TableHead>
-                      <TableHead className="text-center font-semibold">Hilang</TableHead>
-                      <TableHead className="text-center font-semibold">
+                      <TableHead className="text-center font-semibold relative z-0">Luka</TableHead>
+                      <TableHead className="text-center font-semibold relative z-0">
+                        Hilang
+                      </TableHead>
+                      <TableHead className="text-center font-semibold relative z-0">
                         <abbr title="Belum Ter-Evakuasi">Belum Ter-Evakuasi</abbr>
                       </TableHead>
-                      <TableHead className="text-center font-semibold">Pengungsi</TableHead>
-                      <TableHead className="text-center font-semibold">Terdampak</TableHead>
-                      <TableHead className="text-center font-semibold" colSpan={3}>
+                      <TableHead className="text-center font-semibold relative z-0">
+                        Pengungsi
+                      </TableHead>
+                      <TableHead className="text-center font-semibold relative z-0">
+                        Terdampak
+                      </TableHead>
+                      <TableHead className="text-center font-semibold relative z-0" colSpan={3}>
                         Rumah Rusak
                       </TableHead>
-                      <TableHead className="text-center font-semibold" colSpan={3}>
+                      <TableHead className="text-center font-semibold relative z-0" colSpan={3}>
                         Sekolah Rusak
                       </TableHead>
                     </TableRow>
                     <TableRow className="bg-muted/40 text-[11px] uppercase tracking-wide">
-                      <TableHead className="sticky left-0 z-20 bg-muted/40"></TableHead>
-                      <TableHead className="sticky left-16 z-20 bg-muted/40"></TableHead>
+                      <TableHead className="sticky left-0 z-40 w-[64px] p-3 bg-muted/40 border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]"></TableHead>
+                      <TableHead className="sticky left-[64px] z-40 p-3 bg-muted/40 border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]"></TableHead>
                       <TableHead colSpan={7}></TableHead>
                       <TableHead className="text-center">Ringan</TableHead>
                       <TableHead className="text-center">Sedang</TableHead>
@@ -440,61 +446,61 @@ export function DisasterDashboard({
                   <TableBody>
                     {filteredData.map((item) => (
                       <TableRow key={item.id} className="text-sm odd:bg-muted/20">
-                        <TableCell className="sticky left-0 z-10 font-semibold text-muted-foreground bg-background odd:bg-muted/20">
+                        <TableCell className="sticky left-0 z-140 w-[64px] font-semibold text-muted-foreground bg-background odd:bg-gray-100 p-3 border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]">
                           {item.no}
                         </TableCell>
-                        <TableCell className="sticky left-16 z-10 font-medium bg-background odd:bg-muted/20">
+                        <TableCell className="sticky left-[54px] z-140 font-medium bg-background odd:bg-muted/20 p-3 border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]">
                           {item.kecamatan}
                         </TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="text-right relative z-0">
                           {formatNumber(item.jumlah_penduduk)}
                         </TableCell>
-                        <TableCell className="text-center text-destructive font-semibold">
+                        <TableCell className="text-center text-destructive font-semibold relative z-0">
                           {item.meninggal > 0 ? formatNumber(item.meninggal) : '-'}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center relative z-0">
                           {item.luka > 0 ? formatNumber(item.luka) : '-'}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center relative z-0">
                           {item.hilang > 0 ? formatNumber(item.hilang) : '-'}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center relative z-0">
                           {item.belum_ter_evakuasi > 0
                             ? formatNumber(item.belum_ter_evakuasi)
                             : '-'}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center relative z-0">
                           {item.pengungsi_di_luar_pandan > 0
                             ? formatNumber(item.pengungsi_di_luar_pandan)
                             : '-'}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center relative z-0">
                           {formatNumber(item.terdampak)}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center relative z-0">
                           {item.rumah_rusak_ringan > 0
                             ? formatNumber(item.rumah_rusak_ringan)
                             : '-'}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center relative z-0">
                           {item.rumah_rusak_sedang > 0
                             ? formatNumber(item.rumah_rusak_sedang)
                             : '-'}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center relative z-0">
                           {item.rumah_rusak_berat > 0 ? formatNumber(item.rumah_rusak_berat) : '-'}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center relative z-0">
                           {item.sekolah_rusak_ringan > 0
                             ? formatNumber(item.sekolah_rusak_ringan)
                             : '-'}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center relative z-0">
                           {item.sekolah_rusak_sedang > 0
                             ? formatNumber(item.sekolah_rusak_sedang)
                             : '-'}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center relative z-0">
                           {item.sekolah_rusak_berat > 0
                             ? formatNumber(item.sekolah_rusak_berat)
                             : '-'}
@@ -504,41 +510,47 @@ export function DisasterDashboard({
                   </TableBody>
                   <TableFooter className="bg-primary/5 text-sm font-semibold">
                     <TableRow>
-                      <TableCell className="sticky left-0 z-10 bg-primary/5">Total</TableCell>
-                      <TableCell className="sticky left-16 z-10 bg-primary/5"></TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="sticky left-0 z-140 w-[64px] bg-primary/5 p-3 border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]">
+                        Total
+                      </TableCell>
+                      <TableCell className="sticky left-[64px] z-140 bg-primary/5 p-3 border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]"></TableCell>
+                      <TableCell className="text-right relative z-0">
                         {formatNumber(totals.jumlah_penduduk)}
                       </TableCell>
-                      <TableCell className="text-center text-destructive">
+                      <TableCell className="text-center text-destructive relative z-0">
                         {formatNumber(totals.meninggal)}
                       </TableCell>
-                      <TableCell className="text-center">{formatNumber(totals.luka)}</TableCell>
-                      <TableCell className="text-center">{formatNumber(totals.hilang)}</TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center relative z-0">
+                        {formatNumber(totals.luka)}
+                      </TableCell>
+                      <TableCell className="text-center relative z-0">
+                        {formatNumber(totals.hilang)}
+                      </TableCell>
+                      <TableCell className="text-center relative z-0">
                         {formatNumber(totals.belum_ter_evakuasi)}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center relative z-0">
                         {formatNumber(totals.pengungsi)}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center relative z-0">
                         {formatNumber(totals.terdampak)}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center relative z-0">
                         {formatNumber(totals.rumah_ringan)}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center relative z-0">
                         {formatNumber(totals.rumah_sedang)}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center relative z-0">
                         {formatNumber(totals.rumah_berat)}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center relative z-0">
                         {formatNumber(totals.sekolah_ringan)}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center relative z-0">
                         {formatNumber(totals.sekolah_sedang)}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center relative z-0">
                         {formatNumber(totals.sekolah_berat)}
                       </TableCell>
                     </TableRow>
