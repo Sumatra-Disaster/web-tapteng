@@ -1,6 +1,38 @@
+import type { Metadata } from 'next';
 import { DisasterDashboard } from '@/components/disaster-dashboard';
 import { getSheetData, getSheetLastUpdate, getSpreadsheetId } from '../lib/sheet/google-sheets';
 import { mapSheetData, mapSheetDataRefugee, mapSheetDataHelipad } from '@/utils/dataMapper';
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://infobencanatapteng.vercel.app';
+
+export const metadata: Metadata = {
+  title: 'Dashboard Data Bencana',
+  description:
+    'Dashboard lengkap data bencana banjir bandang dan longsor di Tapanuli Tengah. Informasi real-time tentang korban, pengungsi, dan kerusakan infrastruktur per kecamatan. Data resmi dari BPBD Kabupaten Tapanuli Tengah.',
+  keywords: [
+    'dashboard bencana tapteng',
+    'data bencana tapanuli tengah',
+    'statistik bencana',
+    'korban bencana tapteng',
+    'pengungsi tapteng',
+    'kerusakan infrastruktur',
+  ],
+  openGraph: {
+    title: 'Dashboard Data Bencana Tapanuli Tengah',
+    description:
+      'Dashboard lengkap data bencana banjir bandang dan longsor di Tapanuli Tengah. Informasi real-time tentang korban, pengungsi, dan kerusakan infrastruktur.',
+    url: siteUrl,
+    images: ['/logo-tapteng.png'],
+  },
+  twitter: {
+    title: 'Dashboard Data Bencana Tapanuli Tengah',
+    description:
+      'Dashboard lengkap data bencana banjir bandang dan longsor di Tapanuli Tengah. Informasi real-time tentang korban, pengungsi, dan kerusakan infrastruktur.',
+  },
+  alternates: {
+    canonical: siteUrl,
+  },
+};
 
 export default async function Home() {
   const spreadsheetId = getSpreadsheetId();

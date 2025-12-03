@@ -1,6 +1,38 @@
+import type { Metadata } from 'next';
 import { Evacuees } from '@/components/evacuees';
 import { getSheetData, getSheetLastUpdate, getSpreadsheetId } from '../../lib/sheet/google-sheets';
 import { mapSheetDataEvacuee } from '../../utils/dataMapper';
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://infobencanatapteng.vercel.app';
+
+export const metadata: Metadata = {
+  title: 'Daftar Pengungsi',
+  description:
+    'Daftar lengkap pengungsi akibat bencana banjir bandang dan longsor di Tapanuli Tengah. Informasi pengungsi di berbagai lokasi posko pengungsian. Data resmi dari BPBD Kabupaten Tapanuli Tengah.',
+  keywords: [
+    'pengungsi tapteng',
+    'daftar pengungsi bencana',
+    'pengungsi banjir bandang',
+    'posko pengungsian',
+    'evakuasi tapteng',
+    'pengungsi longsor',
+  ],
+  openGraph: {
+    title: 'Daftar Pengungsi - Bencana Tapanuli Tengah',
+    description:
+      'Daftar lengkap pengungsi akibat bencana banjir bandang dan longsor di Tapanuli Tengah. Informasi pengungsi di berbagai lokasi posko pengungsian.',
+    url: `${siteUrl}/daftar-pengungsi`,
+    images: ['/logo-tapteng.png'],
+  },
+  twitter: {
+    title: 'Daftar Pengungsi - Bencana Tapanuli Tengah',
+    description:
+      'Daftar lengkap pengungsi akibat bencana banjir bandang dan longsor di Tapanuli Tengah. Informasi pengungsi di berbagai lokasi posko pengungsian.',
+  },
+  alternates: {
+    canonical: `${siteUrl}/daftar-pengungsi`,
+  },
+};
 
 export const revalidate = 300;
 
