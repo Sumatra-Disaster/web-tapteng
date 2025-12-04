@@ -313,10 +313,7 @@ export function DisasterDashboard({
               </button>
             </div>
 
-            <div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
-              aria-live="polite"
-            >
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5" aria-live="polite">
               {statCards.map((stat) => {
                 const colorClasses = {
                   red: 'from-red-500 to-rose-600',
@@ -326,22 +323,22 @@ export function DisasterDashboard({
                 };
                 return (
                   <div key={stat.label} className="group relative">
-                    <Card className="relative border-2 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
-                      <CardHeader className="space-y-4 pb-3">
+                    <Card className="relative border-2 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 py-2 md:py-0">
+                      <CardHeader className="space-y-2 md:space-y-4 p-3 md:p-6 pb-2 md:pb-3">
                         <CardDescription className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
                           {stat.label}
                         </CardDescription>
                         <CardTitle
-                          className={`text-4xl md:text-5xl font-black bg-gradient-to-r ${colorClasses[stat.highlight as keyof typeof colorClasses]} bg-clip-text text-transparent`}
+                          className={`text-3xl md:text-5xl font-black bg-gradient-to-r ${colorClasses[stat.highlight as keyof typeof colorClasses]} bg-clip-text text-transparent`}
                         >
                           {formatNumber(stat.value)}
                         </CardTitle>
                       </CardHeader>
                       {stat.navigateTo && stat.description && (
-                        <CardFooter className="pt-0 pb-5">
+                        <CardFooter className="pt-0 pb-3 md:pb-5 px-3 md:px-6">
                           <button
                             onClick={() => router.push(stat.navigateTo!)}
-                            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl bg-gradient-to-r ${colorClasses[stat.highlight as keyof typeof colorClasses]} text-white font-bold text-sm transition-all hover:shadow-lg group-hover:gap-3`}
+                            className={`w-full flex items-center justify-between px-3 py-2 md:px-4 md:py-3 rounded-xl bg-gradient-to-r ${colorClasses[stat.highlight as keyof typeof colorClasses]} text-white font-bold text-xs md:text-sm transition-all hover:shadow-lg group-hover:gap-3`}
                             aria-label={stat.description}
                           >
                             <span>{stat.description}</span>
