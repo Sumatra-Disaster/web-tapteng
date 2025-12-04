@@ -241,266 +241,308 @@ export function DisasterDashboard({
   };
 
   return (
-    <div className="container mx-auto max-w-6xl py-10 px-4 md:px-6">
-      <a
-        href="#data-tabel-kecamatan"
-        className="sr-only focus:not-sr-only focus:top-4 focus:left-4 focus:rounded-full focus:bg-background focus:px-4 focus:py-2"
-      >
-        Lewati ke tabel data kecamatan
-      </a>
+    <div className="min-h-screen bg-white dark:bg-slate-950">
+      <div className="container mx-auto max-w-7xl py-8 px-4 md:px-6 lg:px-8">
+        <a
+          href="#data-tabel-kecamatan"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-background focus:px-6 focus:py-3 focus:shadow-lg"
+        >
+          Lewati ke tabel data kecamatan
+        </a>
 
-      <div className="flex flex-col gap-10">
-        <Header
-          lastUpdateDate={lastUpdateDate}
-          showActions={false}
-          title="Data Bencana Banjir Bandang dan Longsor"
-        />
+        <div className="flex flex-col gap-6 md:gap-8">
+          <Header
+            lastUpdateDate={lastUpdateDate}
+            showActions={false}
+            title="Data Bencana Banjir Bandang dan Longsor"
+          />
 
-        {/* Refresh Button */}
-        <div className="flex justify-end">
-          <button
-            onClick={refreshData}
-            disabled={isRefreshing}
-            className="flex items-center gap-2 rounded-lg border bg-background px-4 py-2 text-sm font-medium transition hover:bg-muted disabled:opacity-50"
-            aria-label="Refresh data"
-            title="Perbarui data"
-          >
-            <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-            <span className="sr-only md:not-sr-only">
-              {isRefreshing ? 'Memperbarui...' : 'Refresh Data'}
-            </span>
-          </button>
-        </div>
+          {/* Hero Section - Summary Statistics */}
+          <section className="relative">
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 p-[2px]">
+              <div className="relative bg-white dark:bg-slate-900 rounded-2xl p-5 md:p-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-center md:text-left">
+                  <div className="flex flex-col gap-2">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950 border border-red-200 dark:border-red-800 w-fit mx-auto md:mx-0">
+                      <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
+                      <span className="text-xs font-bold text-red-700 dark:text-red-300 uppercase tracking-widest">
+                        Live Update
+                      </span>
+                    </div>
+                    <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                      Persentase Warga Terdampak
+                    </p>
+                  </div>
 
-        {/* Summary Statistics */}
-        <section className="mb-6">
-          <Card className="">
-            <CardContent className="p-4 text-center">
-              <div className="flex flex-col items-center gap-4 text-center">
-                <span className="text-center">Warga Terdampak</span>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-bold text-primary md:text-5xl">
-                    {persentaseTerdampak.toFixed(1)}%
-                  </span>
-                </div>
-                <div className="flex flex-row items-center gap-2 text-sm text-muted-foreground md:text-base">
-                  <span className="font-semibold text-foreground">
-                    {formatNumber(totals.terdampak)} dari {formatNumber(totals.jumlah_penduduk)}{' '}
-                    warga terdampak
-                  </span>
-                  {/* <span>dari <span className="font-semibold text-foreground">{formatNumber(totals.jumlah_penduduk)}</span> warga terdampak</span> */}
+                  <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4">
+                    <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 bg-clip-text text-transparent">
+                      {persentaseTerdampak.toFixed(1)}%
+                    </div>
+                    <div className="flex flex-wrap items-center justify-center gap-1.5 text-sm md:text-base">
+                      <span className="font-black text-foreground">
+                        {formatNumber(totals.terdampak)}
+                      </span>
+                      <span className="text-muted-foreground">dari</span>
+                      <span className="font-black text-foreground">
+                        {formatNumber(totals.jumlah_penduduk)}
+                      </span>
+                      <span className="text-muted-foreground">warga</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </section>
+            </div>
+          </section>
 
-        {/* Summary Cards */}
-        <section
-          className="grid grid-cols-2 gap-4 md:grid-cols-2 xl:grid-cols-4"
-          aria-live="polite"
-        >
-          {statCards.map((stat) => {
-            return (
-              <Card key={stat.label} className={`${getCardStyle(stat)} text-center`}>
-                <CardHeader className="space-y-1">
-                  <CardDescription className="text-sm font-semibold text-black">
-                    {stat.label}
-                  </CardDescription>
+          {/* Quick Stats Cards */}
+          <section className="relative">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-black text-foreground">Statistik Utama</h2>
+                <p className="text-sm text-muted-foreground mt-1">Data terkini bencana</p>
+              </div>
+              <button
+                onClick={refreshData}
+                disabled={isRefreshing}
+                className="flex items-center gap-2 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 md:px-5 py-2.5 text-xs md:text-sm font-bold shadow-lg transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                aria-label="Refresh data"
+                title="Perbarui data"
+              >
+                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <span>{isRefreshing ? 'Memperbarui...' : 'Refresh'}</span>
+              </button>
+            </div>
 
-                  <CardTitle
-                    className={`text-3xl font-bold
-                      ${stat.highlight === 'red' ? 'text-destructive' : ''}
-                      ${stat.highlight === 'yellow' ? 'text-yellow-500' : ''}
-                      ${stat.highlight === 'blue' ? 'text-blue-500' : ''}
-                    `}
-                  >
-                    {formatNumber(stat.value)}
-                  </CardTitle>
+            <div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+              aria-live="polite"
+            >
+              {statCards.map((stat) => {
+                const colorClasses = {
+                  red: 'from-red-500 to-rose-600',
+                  yellow: 'from-amber-500 to-orange-600',
+                  green: 'from-emerald-500 to-teal-600',
+                  blue: 'from-blue-500 to-indigo-600',
+                };
+                return (
+                  <div key={stat.label} className="group relative">
+                    <Card className="relative border-2 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+                      <CardHeader className="space-y-4 pb-3">
+                        <CardDescription className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                          {stat.label}
+                        </CardDescription>
+                        <CardTitle
+                          className={`text-4xl md:text-5xl font-black bg-gradient-to-r ${colorClasses[stat.highlight as keyof typeof colorClasses]} bg-clip-text text-transparent`}
+                        >
+                          {formatNumber(stat.value)}
+                        </CardTitle>
+                      </CardHeader>
+                      {stat.navigateTo && stat.description && (
+                        <CardFooter className="pt-0 pb-5">
+                          <button
+                            onClick={() => router.push(stat.navigateTo!)}
+                            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl bg-gradient-to-r ${colorClasses[stat.highlight as keyof typeof colorClasses]} text-white font-bold text-sm transition-all hover:shadow-lg group-hover:gap-3`}
+                            aria-label={stat.description}
+                          >
+                            <span>{stat.description}</span>
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                          </button>
+                        </CardFooter>
+                      )}
+                    </Card>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
 
-                  {!stat.navigateTo && stat.description && (
-                    <p className="text-xs text-muted-foreground">{stat.description}</p>
-                  )}
-                </CardHeader>
-
-                {stat.navigateTo && stat.description && (
-                  <CardFooter className="pt-0">
-                    <Button
-                      variant="blue"
-                      size="default"
-                      className="w-full justify-between text-sm font-medium transition-colors"
-                      onClick={() => router.push(stat.navigateTo!)}
-                      aria-label={stat.description}
-                    >
-                      <span>{stat.description}</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </Button>
-                  </CardFooter>
-                )}
-              </Card>
-            );
-          })}
-        </section>
-
-        {/* Search */}
-        <section
-          aria-labelledby="search-dashboard"
-          className="space-y-2 rounded-2xl border bg-muted/20 p-4 md:p-6 hidden"
-        >
-          <div>
-            {/* <p
+          {/* Search */}
+          <section
+            aria-labelledby="search-dashboard"
+            className="space-y-2 rounded-2xl border bg-muted/20 p-4 md:p-6 hidden"
+          >
+            <div>
+              {/* <p
               id="search-dashboard"
               className="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
             >
               Cari data kecamatan
             </p> */}
-            {/* <p className="text-sm text-muted-foreground">
+              {/* <p className="text-sm text-muted-foreground">
               Gunakan kotak pencarian untuk memfilter berdasarkan nama kecamatan atau angka pada
               tabel.
             </p> */}
-          </div>
-          <label htmlFor="dashboard-search" className="sr-only">
-            Masukkan kata kunci pencarian
-          </label>
-          <div className="relative">
-            <Search
-              className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
-              aria-hidden
-            />
-            <Input
-              id="dashboard-search"
-              placeholder="Cari kecamatan, jumlah korban, atau kata kunci lain"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="h-12 rounded-full border-muted-foreground/20 bg-background/60 pl-12 text-base"
-            />
-          </div>
-          {/* <p className="text-sm text-muted-foreground" aria-live="polite">
+            </div>
+            <label htmlFor="dashboard-search" className="sr-only">
+              Masukkan kata kunci pencarian
+            </label>
+            <div className="relative">
+              <Search
+                className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+                aria-hidden
+              />
+              <Input
+                id="dashboard-search"
+                placeholder="Cari kecamatan, jumlah korban, atau kata kunci lain"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="h-12 rounded-full border-muted-foreground/20 bg-background/60 pl-12 text-base"
+              />
+            </div>
+            {/* <p className="text-sm text-muted-foreground" aria-live="polite">
             Menampilkan {filteredData.length} dari {data.length} kecamatan.
           </p> */}
-        </section>
+          </section>
 
-        {/* Data Table */}
-        <section aria-labelledby="data-tabel-kecamatan" className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 id="data-tabel-kecamatan" className="text-xl font-semibold">
-              Data Rincian per Kecamatan
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Geser ke samping untuk melihat seluruh kolom.
-            </p>
-          </div>
-          <Card className="py-0 rounded-none">
-            <CardContent className="p-0">
+          {/* Data Table */}
+          <section aria-labelledby="data-tabel-kecamatan" className="space-y-5">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <h2
+                  id="data-tabel-kecamatan"
+                  className="text-2xl md:text-3xl font-black text-foreground"
+                >
+                  Data Rincian per Kecamatan
+                </h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Informasi lengkap setiap wilayah
+                </p>
+              </div>
+              <div className="inline-flex items-center gap-2 text-xs md:text-sm text-muted-foreground bg-amber-50 dark:bg-amber-950/30 px-4 py-2 rounded-full border border-amber-200 dark:border-amber-800">
+                <span className="text-base">💡</span>
+                <span className="font-medium">Geser ke samping untuk melihat seluruh kolom</span>
+              </div>
+            </div>
+            <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 shadow-lg bg-white dark:bg-slate-950">
               <div className="overflow-x-auto">
                 <Table>
-                  <TableCaption className="px-6 text-left pb-2">
-                    Data ringkas korban dan kerusakan di setiap kecamatan Kabupaten Tapanuli Tengah.
-                  </TableCaption>
-                  <TableHeader className="sticky top-0 z-10 bg-background/95 backdrop-blur">
-                    <TableRow className="text-xs uppercase tracking-wide">
-                      <TableHead className="sticky left-0 z-40 w-[64px] p-3 font-semibold bg-background border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]">
+                  <TableHeader className="sticky top-0 z-10">
+                    <TableRow className="bg-slate-50 dark:bg-slate-900 text-[11px] uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                      <TableHead className="sticky left-0 z-40 w-[45px] py-3 px-3 font-bold bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">
                         No
                       </TableHead>
-                      <TableHead className="sticky left-[64px] z-40 min-w-[160px] p-3 font-semibold bg-background border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]">
+                      <TableHead className="sticky left-[45px] z-40 min-w-[140px] py-3 px-3 font-bold bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">
                         Kecamatan
                       </TableHead>
-                      <TableHead className="min-w-[180px] text-right font-semibold whitespace-nowrap relative z-0">
-                        Jumlah Penduduk
+                      <TableHead className="min-w-[120px] text-right font-bold py-3 px-3 text-slate-700 dark:text-slate-300">
+                        Penduduk
                       </TableHead>
-                      <TableHead className="text-center font-semibold relative z-0">
-                        <abbr title="Korban meninggal dunia">Meninggal</abbr>
+                      <TableHead className="text-center font-bold py-3 px-3 text-slate-700 dark:text-slate-300">
+                        Meninggal
                       </TableHead>
-                      <TableHead className="text-center font-semibold relative z-0">Luka</TableHead>
-                      <TableHead className="text-center font-semibold relative z-0">
+                      <TableHead className="text-center font-bold py-3 px-3 text-slate-700 dark:text-slate-300">
+                        Luka
+                      </TableHead>
+                      <TableHead className="text-center font-bold py-3 px-3 text-slate-700 dark:text-slate-300">
                         Hilang
                       </TableHead>
-                      <TableHead className="text-center font-semibold relative z-0">
-                        <abbr title="Belum Ter-Evakuasi">Belum Ter-Evakuasi</abbr>
+                      <TableHead className="text-center font-bold py-3 px-3 text-slate-700 dark:text-slate-300">
+                        Belum Evakuasi
                       </TableHead>
-                      <TableHead className="text-center font-semibold relative z-0">
+                      <TableHead className="text-center font-bold py-3 px-3 text-slate-700 dark:text-slate-300">
                         Pengungsi
                       </TableHead>
-                      <TableHead className="text-center font-semibold relative z-0">
+                      <TableHead className="text-center font-bold py-3 px-3 text-slate-700 dark:text-slate-300">
                         Terdampak
                       </TableHead>
-                      <TableHead className="text-center font-semibold relative z-0" colSpan={3}>
+                      <TableHead
+                        className="text-center font-bold py-3 px-3 border-l border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300"
+                        colSpan={3}
+                      >
                         Rumah Rusak
                       </TableHead>
-                      <TableHead className="text-center font-semibold relative z-0" colSpan={3}>
+                      <TableHead
+                        className="text-center font-bold py-3 px-3 border-l border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300"
+                        colSpan={3}
+                      >
                         Sekolah Rusak
                       </TableHead>
                     </TableRow>
-                    <TableRow className="bg-muted/40 text-[11px] uppercase tracking-wide">
-                      <TableHead className="sticky left-0 z-40 w-[64px] p-3 bg-muted/40 border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]"></TableHead>
-                      <TableHead className="sticky left-[64px] z-40 p-3 bg-muted/40 border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]"></TableHead>
+                    <TableRow className="bg-white dark:bg-slate-950 text-[10px] uppercase tracking-wide border-b border-slate-200 dark:border-slate-800">
+                      <TableHead className="sticky left-0 z-40 w-[45px] py-2 px-2 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800"></TableHead>
+                      <TableHead className="sticky left-[45px] z-40 py-2 px-2 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800"></TableHead>
                       <TableHead colSpan={7}></TableHead>
-                      <TableHead className="text-center">Ringan</TableHead>
-                      <TableHead className="text-center">Sedang</TableHead>
-                      <TableHead className="text-center">Berat</TableHead>
-                      <TableHead className="text-center">Ringan</TableHead>
-                      <TableHead className="text-center">Sedang</TableHead>
-                      <TableHead className="text-center">Berat</TableHead>
+                      <TableHead className="text-center font-semibold py-2 px-2 text-slate-600 dark:text-slate-400">
+                        Ringan
+                      </TableHead>
+                      <TableHead className="text-center font-semibold py-2 px-2 text-slate-600 dark:text-slate-400">
+                        Sedang
+                      </TableHead>
+                      <TableHead className="text-center font-semibold py-2 px-2 text-slate-600 dark:text-slate-400">
+                        Berat
+                      </TableHead>
+                      <TableHead className="text-center font-semibold py-2 px-2 border-l border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
+                        Ringan
+                      </TableHead>
+                      <TableHead className="text-center font-semibold py-2 px-2 text-slate-600 dark:text-slate-400">
+                        Sedang
+                      </TableHead>
+                      <TableHead className="text-center font-semibold py-2 px-2 text-slate-600 dark:text-slate-400">
+                        Berat
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredData.map((item) => (
-                      <TableRow key={item.id} className="text-sm odd:bg-muted/20">
-                        <TableCell className="sticky left-0 z-140 w-[64px] font-semibold text-muted-foreground bg-background odd:bg-gray-100 p-3 border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]">
+                    {filteredData.map((item, index) => (
+                      <TableRow
+                        key={item.id}
+                        className={`text-[13px] transition-colors hover:bg-slate-50 dark:hover:bg-slate-900/50 ${index % 2 === 0 ? 'bg-white dark:bg-slate-950' : 'bg-slate-50/30 dark:bg-slate-900/30'}`}
+                      >
+                        <TableCell className="sticky left-0 z-140 w-[45px] font-semibold text-slate-500 dark:text-slate-400 py-3 px-3 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
                           {item.no}
                         </TableCell>
-                        <TableCell className="sticky left-[54px] z-140 font-medium bg-background odd:bg-muted/20 p-3 border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]">
+                        <TableCell className="sticky left-[45px] z-140 font-semibold py-3 px-3 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
                           {item.kecamatan}
                         </TableCell>
-                        <TableCell className="text-right relative z-0">
+                        <TableCell className="text-right font-medium py-3 px-3 text-slate-700 dark:text-slate-300">
                           {formatNumber(item.jumlah_penduduk)}
                         </TableCell>
-                        <TableCell className="text-center text-destructive font-semibold relative z-0">
+                        <TableCell className="text-center text-red-600 dark:text-red-400 font-bold py-3 px-3">
                           {item.meninggal > 0 ? formatNumber(item.meninggal) : '-'}
                         </TableCell>
-                        <TableCell className="text-center relative z-0">
+                        <TableCell className="text-center py-3 px-3 text-slate-700 dark:text-slate-300">
                           {item.luka > 0 ? formatNumber(item.luka) : '-'}
                         </TableCell>
-                        <TableCell className="text-center relative z-0">
+                        <TableCell className="text-center py-3 px-3 text-slate-700 dark:text-slate-300">
                           {item.hilang > 0 ? formatNumber(item.hilang) : '-'}
                         </TableCell>
-                        <TableCell className="text-center relative z-0">
+                        <TableCell className="text-center py-3 px-3 text-slate-700 dark:text-slate-300">
                           {item.belum_ter_evakuasi > 0
                             ? formatNumber(item.belum_ter_evakuasi)
                             : '-'}
                         </TableCell>
-                        <TableCell className="text-center relative z-0">
+                        <TableCell className="text-center font-semibold py-3 px-3 text-amber-700 dark:text-amber-400">
                           {item.pengungsi_di_luar_pandan > 0
                             ? formatNumber(item.pengungsi_di_luar_pandan)
                             : '-'}
                         </TableCell>
-                        <TableCell className="text-center relative z-0">
+                        <TableCell className="text-center py-3 px-3 text-slate-700 dark:text-slate-300">
                           {formatNumber(item.terdampak)}
                         </TableCell>
-                        <TableCell className="text-center relative z-0">
+                        <TableCell className="text-center py-3 px-3 border-l border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">
                           {item.rumah_rusak_ringan > 0
                             ? formatNumber(item.rumah_rusak_ringan)
                             : '-'}
                         </TableCell>
-                        <TableCell className="text-center relative z-0">
+                        <TableCell className="text-center py-3 px-3 text-slate-700 dark:text-slate-300">
                           {item.rumah_rusak_sedang > 0
                             ? formatNumber(item.rumah_rusak_sedang)
                             : '-'}
                         </TableCell>
-                        <TableCell className="text-center relative z-0">
+                        <TableCell className="text-center py-3 px-3 text-slate-700 dark:text-slate-300">
                           {item.rumah_rusak_berat > 0 ? formatNumber(item.rumah_rusak_berat) : '-'}
                         </TableCell>
-                        <TableCell className="text-center relative z-0">
+                        <TableCell className="text-center py-3 px-3 border-l border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">
                           {item.sekolah_rusak_ringan > 0
                             ? formatNumber(item.sekolah_rusak_ringan)
                             : '-'}
                         </TableCell>
-                        <TableCell className="text-center relative z-0">
+                        <TableCell className="text-center py-3 px-3 text-slate-700 dark:text-slate-300">
                           {item.sekolah_rusak_sedang > 0
                             ? formatNumber(item.sekolah_rusak_sedang)
                             : '-'}
                         </TableCell>
-                        <TableCell className="text-center relative z-0">
+                        <TableCell className="text-center py-3 px-3 text-slate-700 dark:text-slate-300">
                           {item.sekolah_rusak_berat > 0
                             ? formatNumber(item.sekolah_rusak_berat)
                             : '-'}
@@ -508,69 +550,72 @@ export function DisasterDashboard({
                       </TableRow>
                     ))}
                   </TableBody>
-                  <TableFooter className="bg-primary/5 text-sm font-semibold">
+                  <TableFooter className="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-[13px] font-bold border-t-2 border-slate-300 dark:border-slate-700">
                     <TableRow>
-                      <TableCell className="sticky left-0 z-140 w-[64px] bg-primary/5 p-3 border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]">
+                      <TableCell className="sticky left-0 z-140 w-[45px] bg-slate-100 dark:bg-slate-900 py-3.5 px-3 border-r border-slate-300 dark:border-slate-700">
                         Total
                       </TableCell>
-                      <TableCell className="sticky left-[64px] z-140 bg-primary/5 p-3 border-r border-border shadow-[2px_0_4px_rgba(0,0,0,0.1)]"></TableCell>
-                      <TableCell className="text-right relative z-0">
+                      <TableCell className="sticky left-[45px] z-140 bg-slate-100 dark:bg-slate-900 py-3.5 px-3 border-r border-slate-300 dark:border-slate-700"></TableCell>
+                      <TableCell className="text-right font-bold py-3.5 px-3">
                         {formatNumber(totals.jumlah_penduduk)}
                       </TableCell>
-                      <TableCell className="text-center text-destructive relative z-0">
+                      <TableCell className="text-center text-red-700 dark:text-red-400 font-bold py-3.5 px-3">
                         {formatNumber(totals.meninggal)}
                       </TableCell>
-                      <TableCell className="text-center relative z-0">
+                      <TableCell className="text-center font-bold py-3.5 px-3">
                         {formatNumber(totals.luka)}
                       </TableCell>
-                      <TableCell className="text-center relative z-0">
+                      <TableCell className="text-center font-bold py-3.5 px-3">
                         {formatNumber(totals.hilang)}
                       </TableCell>
-                      <TableCell className="text-center relative z-0">
+                      <TableCell className="text-center font-bold py-3.5 px-3">
                         {formatNumber(totals.belum_ter_evakuasi)}
                       </TableCell>
-                      <TableCell className="text-center relative z-0">
+                      <TableCell className="text-center text-amber-700 dark:text-amber-400 font-bold py-3.5 px-3">
                         {formatNumber(totals.pengungsi)}
                       </TableCell>
-                      <TableCell className="text-center relative z-0">
+                      <TableCell className="text-center font-bold py-3.5 px-3">
                         {formatNumber(totals.terdampak)}
                       </TableCell>
-                      <TableCell className="text-center relative z-0">
+                      <TableCell className="text-center font-bold py-3.5 px-3 border-l border-slate-300 dark:border-slate-700">
                         {formatNumber(totals.rumah_ringan)}
                       </TableCell>
-                      <TableCell className="text-center relative z-0">
+                      <TableCell className="text-center font-bold py-3.5 px-3">
                         {formatNumber(totals.rumah_sedang)}
                       </TableCell>
-                      <TableCell className="text-center relative z-0">
+                      <TableCell className="text-center font-bold py-3.5 px-3">
                         {formatNumber(totals.rumah_berat)}
                       </TableCell>
-                      <TableCell className="text-center relative z-0">
+                      <TableCell className="text-center font-bold py-3.5 px-3 border-l border-slate-300 dark:border-slate-700">
                         {formatNumber(totals.sekolah_ringan)}
                       </TableCell>
-                      <TableCell className="text-center relative z-0">
+                      <TableCell className="text-center font-bold py-3.5 px-3">
                         {formatNumber(totals.sekolah_sedang)}
                       </TableCell>
-                      <TableCell className="text-center relative z-0">
+                      <TableCell className="text-center font-bold py-3.5 px-3">
                         {formatNumber(totals.sekolah_berat)}
                       </TableCell>
                     </TableRow>
                   </TableFooter>
                 </Table>
               </div>
-            </CardContent>
-          </Card>
-
-          {filteredData.length === 0 && (
-            <div
-              className="rounded-2xl border border-dashed bg-muted/30 p-6 text-center text-muted-foreground"
-              role="status"
-            >
-              Tidak ada data yang sesuai dengan pencarian. Coba gunakan kata kunci lain.
             </div>
-          )}
-        </section>
 
-        <Footer />
+            {filteredData.length === 0 && (
+              <div
+                className="rounded-2xl border-2 border-dashed bg-muted/30 p-8 md:p-12 text-center text-muted-foreground"
+                role="status"
+              >
+                <p className="text-lg font-semibold">
+                  Tidak ada data yang sesuai dengan pencarian.
+                </p>
+                <p className="text-sm mt-2">Coba gunakan kata kunci lain.</p>
+              </div>
+            )}
+          </section>
+
+          <Footer />
+        </div>
       </div>
     </div>
   );
