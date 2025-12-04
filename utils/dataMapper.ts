@@ -20,7 +20,7 @@ export function mapSheetData(sheetData: SheetValues): DisasterData[] {
     return [];
   }
 
-  const dataRows = sheetData.slice(1, sheetData.length - 2);
+  const dataRows = sheetData.slice(1);
 
   return dataRows
     .map((row, index): DisasterData | null => {
@@ -29,7 +29,7 @@ export function mapSheetData(sheetData: SheetValues): DisasterData[] {
       }
 
       const kecamatan = String(row[1]).trim();
-      if (kecamatan === '') {
+      if (kecamatan === '' || kecamatan.toUpperCase() === 'TOTAL') {
         return null;
       }
 
@@ -64,7 +64,7 @@ export function mapSheetDataDeceased(sheetData: SheetValues): DeceasedData[] {
     return [];
   }
 
-  const dataRows = sheetData.slice(1, sheetData.length - 2);
+  const dataRows = sheetData.slice(1);
 
   return dataRows
     .map((row, index): DeceasedData | null => {
@@ -73,7 +73,7 @@ export function mapSheetDataDeceased(sheetData: SheetValues): DeceasedData[] {
       }
 
       const name = String(row[1]).trim();
-      if (name === '') {
+      if (name === '' || name.toUpperCase() === 'TOTAL') {
         return null;
       }
 
