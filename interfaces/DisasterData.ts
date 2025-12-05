@@ -21,8 +21,11 @@ export interface DeceasedData {
   id: string;
   no: number | null;
   name: string;
+  jenis_kelamin: string;
   umur: string;
+  keterangan: string;
   alamat: string;
+  kecamatan: string;
   description: string;
 }
 

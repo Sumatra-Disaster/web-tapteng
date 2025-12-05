@@ -64,33 +64,61 @@ export function mapSheetDataDeceased(sheetData: SheetValues): DeceasedData[] {
     return [];
   }
 
-  const dataRows = sheetData.slice(1, sheetData.length - 2);
+  // Process all rows and filter out headers
+  // Very specific header words - only exact matches to avoid filtering valid names
+  const exactHeaderWords = ['nama', 'name', 'no', 'nomor', 'no.'];
 
-  return dataRows
+  const filteredRows: Array<{ index: number; name: string; reason: string }> = [];
+
+  const mapped = sheetData
     .map((row, index): DeceasedData | null => {
+      // Check if row has at least name column
       if (row.length < 2 || !row[1]) {
+        filteredRows.push({ index: index + 1, name: 'N/A', reason: 'no_name_column' });
         return null;
       }
 
       const name = String(row[1]).trim();
       if (name === '') {
+        filteredRows.push({ index: index + 1, name: '(empty)', reason: 'empty_name' });
         return null;
       }
 
-      if (!row[2]) {
+      // Skip header rows - only filter if name is exactly a header word (very strict)
+      // This prevents filtering valid names that might start with these words
+      const nameLower = name.toLowerCase().trim();
+      const isExactHeader = exactHeaderWords.some((header) => nameLower === header.toLowerCase());
+
+      if (isExactHeader && name.length <= 6) {
+        filteredRows.push({ index: index + 1, name, reason: 'header_pattern' });
         return null;
       }
+
+      // Make jenis_kelamin optional - allow empty string
+      const jenisKelamin = row[2] !== undefined && row[2] !== null ? String(row[2]).trim() : '';
 
       return {
         id: (index + 1).toString(),
         no: cleanNumber(row[0]) || null,
         name: name,
-        umur: String(row[2]).trim(),
-        alamat: String(row[3]).trim(),
-        description: String(row[4]).trim(),
+        jenis_kelamin: jenisKelamin,
+        umur: row[3] !== undefined && row[3] !== null ? String(row[3]).trim() : '',
+        alamat: row[4] !== undefined && row[4] !== null ? String(row[4]).trim() : '',
+        keterangan: row[5] !== undefined && row[5] !== null ? String(row[5]).trim() : '',
+        kecamatan: row[9] !== undefined && row[9] !== null ? String(row[9]).trim() : '',
+        description: row[4] !== undefined && row[4] !== null ? String(row[4]).trim() : '',
       };
     })
     .filter((record): record is DeceasedData => record !== null);
+
+  // console.log('Total rows from sheet:', sheetData.length);
+  // console.log('Mapped data count:', mapped.length);
+  // console.log('Filtered out:', filteredCount, 'rows');
+  // console.log('Filter reasons:', filteredReasons);
+  if (filteredRows.length > 0) {
+    console.log('Filtered rows details:', filteredRows.slice(0, 20)); // Show first 20 filtered rows
+  }
+  return mapped;
 }
 
 export function mapSheetDataRefugee(sheetData: SheetValues): {

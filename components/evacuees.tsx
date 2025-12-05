@@ -28,7 +28,7 @@ export function Evacuees({ initialData, lastUpdate }: EvacueesProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState('all');
   const [page, setPage] = useState(1);
-  const pageSize = 50;
+  const [pageSize, setPageSize] = useState(50);
   const router = useRouter();
 
   const locationOptions = useMemo(() => {
@@ -172,31 +172,52 @@ export function Evacuees({ initialData, lastUpdate }: EvacueesProps) {
           </CardContent>
         </Card>
 
-        <div className="flex items-center justify-between gap-4 text-sm text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-sm text-muted-foreground">
           <div>
             Menampilkan {filteredData.length === 0 ? 0 : (page - 1) * pageSize + 1} -{' '}
             {Math.min(page * pageSize, filteredData.length)} dari {filteredData.length} pengungsi
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page <= 1}
-            >
-              Sebelumnya
-            </Button>
-            <span>
-              Halaman {page} / {totalPages}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page >= totalPages}
-            >
-              Selanjutnya
-            </Button>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <label htmlFor="page-size" className="text-sm">
+                Tampilkan:
+              </label>
+              <select
+                id="page-size"
+                value={pageSize}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value));
+                  setPage(1);
+                }}
+                className="rounded-md border border-muted-foreground/20 bg-background px-2 py-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+                <option value={200}>200</option>
+              </select>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page <= 1}
+              >
+                Sebelumnya
+              </Button>
+              <span>
+                Halaman {page} / {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page >= totalPages}
+              >
+                Selanjutnya
+              </Button>
+            </div>
           </div>
         </div>
 
