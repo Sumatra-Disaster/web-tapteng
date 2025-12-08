@@ -54,10 +54,13 @@ export function DisasterDashboard({
   const refreshData = useCallback(async () => {
     setIsRefreshing(true);
     try {
-      const response = await fetch('/api/data', {
+      // Add timestamp to URL to bypass any caching
+      const timestamp = Date.now();
+      const response = await fetch(`/api/data?t=${timestamp}`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
         },
       });
 
@@ -69,6 +72,7 @@ export function DisasterDashboard({
 
       if (result.success && result.data) {
         setData(result.data);
+        // Always update lastUpdate, even if it's the same, to ensure UI reflects latest state
         setCurrentLastUpdate(result.lastUpdate);
         setCurrentTotalPosko(result.totalPosko || totalPosko);
         setLastRefreshTime(Date.now());
@@ -183,7 +187,19 @@ export function DisasterDashboard({
   const persentaseTerdampak = useMemo(() => {
     return (totals.terdampak / totals.jumlah_penduduk) * 100;
   }, [totals.terdampak, totals.jumlah_penduduk]);
-  const lastUpdateDate = currentLastUpdate && currentLastUpdate[0] && currentLastUpdate[0][1];
+
+  // Extract last update date - ensure it's reactive to currentLastUpdate changes
+  const lastUpdateDate = useMemo(() => {
+    if (!currentLastUpdate || !Array.isArray(currentLastUpdate) || currentLastUpdate.length === 0) {
+      return null;
+    }
+    const firstRow = currentLastUpdate[0];
+    if (!Array.isArray(firstRow) || firstRow.length < 2) {
+      return null;
+    }
+    return firstRow[1] || null;
+  }, [currentLastUpdate]);
+
   const numberFormatter = useMemo(() => new Intl.NumberFormat('id-ID'), []);
   const formatNumber = (value: number) => numberFormatter.format(value);
 

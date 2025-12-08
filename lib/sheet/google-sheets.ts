@@ -72,6 +72,8 @@ export async function getSheetData(range: string, spreadsheetId: string): Promis
 /**
  * Get the last modified time of a Google Sheet
  * Returns the date in the format expected by the component: [[null, "date string"]]
+ * Note: Google Drive's modifiedTime may not update immediately when cells are edited.
+ * It typically updates when the file metadata changes or after a short delay.
  */
 export async function getSheetLastUpdate(spreadsheetId: string): Promise<SheetValues> {
   if (!spreadsheetId) {
@@ -82,22 +84,29 @@ export async function getSheetLastUpdate(spreadsheetId: string): Promise<SheetVa
     const auth = await getAuth();
     const drive = google.drive({ version: 'v3', auth });
 
+    // Fetch with supportsAllDrives to ensure we get the latest data
     const response = await drive.files.get({
       fileId: spreadsheetId,
       fields: 'modifiedTime',
+      supportsAllDrives: true,
     });
 
     if (response.data.modifiedTime) {
       const modifiedDate = new Date(response.data.modifiedTime);
 
-      // Format the date for Indonesian locale
-      const formattedDate = modifiedDate.toLocaleDateString('id-ID', {
+      // Format the date for Indonesian locale with consistent timezone handling
+      // Use Intl.DateTimeFormat for more reliable cross-environment behavior
+      // Google Drive returns modifiedTime in ISO 8601 format (UTC)
+      const formatter = new Intl.DateTimeFormat('id-ID', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
+        timeZone: 'Asia/Jakarta',
       });
+
+      const formattedDate = formatter.format(modifiedDate);
 
       // Return in the format expected by the component: [[null, "date string"]]
       return [[null, formattedDate]];
