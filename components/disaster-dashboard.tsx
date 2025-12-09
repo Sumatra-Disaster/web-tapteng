@@ -46,6 +46,8 @@ export function DisasterDashboard({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [currentLastUpdate, setCurrentLastUpdate] = useState<any>(lastUpdate);
   const [currentTotalPosko, setCurrentTotalPosko] = useState<number>(totalPosko);
+  const [currentTotalHelipadLocations, setCurrentTotalHelipadLocations] =
+    useState<number>(totalHelipadLocations);
   const [lastRefreshTime, setLastRefreshTime] = useState<number>(Date.now());
 
   const router = useRouter();
@@ -75,6 +77,7 @@ export function DisasterDashboard({
         // Always update lastUpdate, even if it's the same, to ensure UI reflects latest state
         setCurrentLastUpdate(result.lastUpdate);
         setCurrentTotalPosko(result.totalPosko || totalPosko);
+        setCurrentTotalHelipadLocations(result.totalHelipadLocations ?? totalHelipadLocations);
         setLastRefreshTime(Date.now());
       }
     } catch (error) {
@@ -83,7 +86,7 @@ export function DisasterDashboard({
     } finally {
       setIsRefreshing(false);
     }
-  }, [totalPosko]);
+  }, [totalPosko, totalHelipadLocations]);
 
   // Auto-refresh logic with configurable interval
   useEffect(() => {
@@ -227,7 +230,7 @@ export function DisasterDashboard({
     },
     {
       label: 'Titik Lokasi Helipad',
-      value: totalHelipadLocations || 0,
+      value: currentTotalHelipadLocations || 0,
       description: 'Lihat Data',
       navigateTo: '/titik-lokasi-helipad',
       highlight: 'blue',

@@ -34,6 +34,10 @@ export const metadata: Metadata = {
   },
 };
 
+// Force dynamic rendering - always fetch fresh data on server
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function Home() {
   const spreadsheetId = getSpreadsheetId();
   // Get last update time from spreadsheet file metadata
