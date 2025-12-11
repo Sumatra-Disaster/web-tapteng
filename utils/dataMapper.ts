@@ -3,6 +3,7 @@ import {
   DisasterData,
   EvacueeData,
   HelipadLocationData,
+  TitikJalanPutusData,
   SheetValues,
 } from '../interfaces/DisasterData';
 
@@ -51,9 +52,10 @@ export function mapSheetData(sheetData: SheetValues): DisasterData[] {
         rumah_rusak_ringan: cleanNumber(row[9]),
         rumah_rusak_sedang: cleanNumber(row[10]),
         rumah_rusak_berat: cleanNumber(row[11]),
-        sekolah_rusak_ringan: cleanNumber(row[12]),
-        sekolah_rusak_sedang: cleanNumber(row[13]),
-        sekolah_rusak_berat: cleanNumber(row[14]),
+        rumah_rusak_hancur_terbawa_arus: cleanNumber(row[12]),
+        sekolah_rusak_ringan: cleanNumber(row[13]),
+        sekolah_rusak_sedang: cleanNumber(row[14]),
+        sekolah_rusak_berat: cleanNumber(row[15]),
       };
     })
     .filter((record): record is DisasterData => record !== null);
@@ -239,4 +241,70 @@ export function mapSheetDataHelipad(sheetData: SheetValues): HelipadLocationData
       };
     })
     .filter((record): record is HelipadLocationData => record !== null);
+}
+
+export function mapSheetDataTitikJalanPutus(sheetData: SheetValues): TitikJalanPutusData[] {
+  if (!sheetData || sheetData.length < 2) {
+    return [];
+  }
+
+  // Skip header row (first row) and process data
+  const dataRows = sheetData.slice(1);
+
+  let currentKecamatan = '';
+
+  return dataRows
+    .map((row, index): TitikJalanPutusData | null => {
+      // Column mapping:
+      // A (row[0]): NO (primary identifier)
+      // B (row[1]): KECAMATAN (district, with merged cells)
+      // C (row[2]): NO (secondary identifier within district)
+      // D (row[3]): NAMA JALAN (road name)
+      // E (row[4]): STATUS JALAN (road status)
+      // F (row[5]): KETERANGAN (description of damage)
+      // G (row[6]): KONDISI TERKINI (current condition)
+      // H (row[7]): KETERANGAN (additional remarks)
+
+      const noValue = row[0];
+      const kecamatanValue = row[1];
+      const noKecamatanValue = row[2];
+      const namaJalanValue = row[3];
+      const statusJalanValue = row[4];
+      const keteranganValue = row[5];
+      const kondisiTerkiniValue = row[6];
+      const keteranganTambahanValue = row[7];
+
+      // Update current KECAMATAN if it exists (handles merged cells)
+      if (kecamatanValue && String(kecamatanValue).trim() !== '') {
+        currentKecamatan = String(kecamatanValue).trim();
+      }
+
+      // Validate required fields - at least need road name
+      if (!namaJalanValue || String(namaJalanValue).trim() === '') {
+        return null;
+      }
+
+      const namaJalan = String(namaJalanValue).trim();
+      const no = noValue ? cleanNumber(noValue) || null : null;
+      const noKecamatan = noKecamatanValue ? cleanNumber(noKecamatanValue) || null : null;
+      const statusJalan = statusJalanValue ? String(statusJalanValue).trim() : '';
+      const keterangan = keteranganValue ? String(keteranganValue).trim() : '';
+      const kondisiTerkini = kondisiTerkiniValue ? String(kondisiTerkiniValue).trim() : '';
+      const keteranganTambahan = keteranganTambahanValue
+        ? String(keteranganTambahanValue).trim()
+        : '';
+
+      return {
+        id: `jalan-putus-${index + 1}`,
+        no,
+        kecamatan: currentKecamatan || '',
+        noKecamatan,
+        namaJalan,
+        statusJalan,
+        keterangan,
+        kondisiTerkini,
+        keteranganTambahan,
+      };
+    })
+    .filter((record): record is TitikJalanPutusData => record !== null);
 }

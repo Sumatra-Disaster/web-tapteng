@@ -1,5 +1,10 @@
 import { getSheetData, getSheetLastUpdate, getSpreadsheetId } from '@/lib/sheet/google-sheets';
-import { mapSheetData, mapSheetDataRefugee, mapSheetDataHelipad } from '@/utils/dataMapper';
+import {
+  mapSheetData,
+  mapSheetDataRefugee,
+  mapSheetDataHelipad,
+  mapSheetDataTitikJalanPutus,
+} from '@/utils/dataMapper';
 
 // Force dynamic rendering - always fetch fresh data
 export const dynamic = 'force-dynamic';
@@ -9,15 +14,17 @@ export async function GET() {
   try {
     const spreadsheetId = getSpreadsheetId();
     // Fetch data from Google Sheets
-    const [lastUpdate, data, poskoData, helipadData] = await Promise.all([
+    const [lastUpdate, data, poskoData, helipadData, jalanPutusData] = await Promise.all([
       getSheetLastUpdate(spreadsheetId),
       getSheetData('KECAMATAN!A5:O', spreadsheetId),
       getSheetData("'POSKO PENGUNGSIAN'!B4:E", spreadsheetId),
       getSheetData("'TITIK-LOKASI-HELIDROP'!A3:F", spreadsheetId),
+      getSheetData("'TITIK JALAN PUTUS'!A1:H", spreadsheetId),
     ]);
 
     const totalPosko = mapSheetDataRefugee(poskoData ?? []);
     const helipadLocations = mapSheetDataHelipad(helipadData ?? []);
+    const jalanPutusLocations = mapSheetDataTitikJalanPutus(jalanPutusData ?? []);
     const initialData = mapSheetData(data ?? []);
 
     return Response.json(
@@ -26,6 +33,7 @@ export async function GET() {
         lastUpdate: lastUpdate,
         totalPosko: totalPosko.totalPosko,
         totalHelipadLocations: helipadLocations.length,
+        totalTitikJalanPutus: jalanPutusLocations.length,
         timestamp: Date.now(),
         success: true,
       },

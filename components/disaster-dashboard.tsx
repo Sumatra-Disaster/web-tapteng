@@ -33,6 +33,7 @@ interface DisasterDashboardProps {
   lastUpdate: any;
   totalPosko: number;
   totalHelipadLocations: number;
+  totalTitikJalanPutus: number;
 }
 
 export function DisasterDashboard({
@@ -40,6 +41,7 @@ export function DisasterDashboard({
   lastUpdate,
   totalPosko,
   totalHelipadLocations,
+  totalTitikJalanPutus,
 }: DisasterDashboardProps) {
   const [data, setData] = useState<DisasterData[]>(initialData);
   const [searchTerm, setSearchTerm] = useState('');
@@ -48,6 +50,8 @@ export function DisasterDashboard({
   const [currentTotalPosko, setCurrentTotalPosko] = useState<number>(totalPosko);
   const [currentTotalHelipadLocations, setCurrentTotalHelipadLocations] =
     useState<number>(totalHelipadLocations);
+  const [currentTotalTitikJalanPutus, setCurrentTotalTitikJalanPutus] =
+    useState<number>(totalTitikJalanPutus);
   const [lastRefreshTime, setLastRefreshTime] = useState<number>(Date.now());
 
   const router = useRouter();
@@ -78,6 +82,7 @@ export function DisasterDashboard({
         setCurrentLastUpdate(result.lastUpdate);
         setCurrentTotalPosko(result.totalPosko || totalPosko);
         setCurrentTotalHelipadLocations(result.totalHelipadLocations ?? totalHelipadLocations);
+        setCurrentTotalTitikJalanPutus(result.totalTitikJalanPutus ?? totalTitikJalanPutus);
         setLastRefreshTime(Date.now());
       }
     } catch (error) {
@@ -86,7 +91,7 @@ export function DisasterDashboard({
     } finally {
       setIsRefreshing(false);
     }
-  }, [totalPosko, totalHelipadLocations]);
+  }, [totalPosko, totalHelipadLocations, totalTitikJalanPutus]);
 
   // Auto-refresh logic with configurable interval
   useEffect(() => {
@@ -166,6 +171,8 @@ export function DisasterDashboard({
         rumah_ringan: acc.rumah_ringan + item.rumah_rusak_ringan,
         rumah_sedang: acc.rumah_sedang + item.rumah_rusak_sedang,
         rumah_berat: acc.rumah_berat + item.rumah_rusak_berat,
+        rumah_hancur_terbawa_arus:
+          acc.rumah_hancur_terbawa_arus + item.rumah_rusak_hancur_terbawa_arus,
         sekolah_ringan: acc.sekolah_ringan + item.sekolah_rusak_ringan,
         sekolah_sedang: acc.sekolah_sedang + item.sekolah_rusak_sedang,
         sekolah_berat: acc.sekolah_berat + item.sekolah_rusak_berat,
@@ -181,6 +188,7 @@ export function DisasterDashboard({
         rumah_ringan: 0,
         rumah_sedang: 0,
         rumah_berat: 0,
+        rumah_hancur_terbawa_arus: 0,
         sekolah_ringan: 0,
         sekolah_sedang: 0,
         sekolah_berat: 0,
@@ -235,6 +243,13 @@ export function DisasterDashboard({
       navigateTo: '/titik-lokasi-helipad',
       highlight: 'blue',
     },
+    {
+      label: 'Titik Jalan Putus',
+      value: currentTotalTitikJalanPutus || 0,
+      description: 'Lihat Data',
+      navigateTo: '/titik-jalan-putus',
+      highlight: 'orange',
+    },
     // {
     //   label: 'Total Penduduk',
     //   value: totals.jumlah_penduduk,
@@ -255,6 +270,8 @@ export function DisasterDashboard({
     if (stat.highlight === 'green') return 'border-green-400/40 bg-green-400/5 shadow-sm';
 
     if (stat.highlight === 'blue') return 'border-blue-400/40 bg-blue-400/5 shadow-sm';
+
+    if (stat.highlight === 'orange') return 'border-orange-400/40 bg-orange-400/5 shadow-sm';
 
     return '';
   };
@@ -332,6 +349,7 @@ export function DisasterDashboard({
                       ${stat.highlight === 'red' ? 'text-destructive' : ''}
                       ${stat.highlight === 'yellow' ? 'text-yellow-500' : ''}
                       ${stat.highlight === 'blue' ? 'text-blue-500' : ''}
+                      ${stat.highlight === 'orange' ? 'text-orange-500' : ''}
                     `}
                   >
                     {formatNumber(stat.value)}
@@ -443,7 +461,7 @@ export function DisasterDashboard({
                       <TableHead className="text-center font-semibold relative z-0">
                         Terdampak
                       </TableHead>
-                      <TableHead className="text-center font-semibold relative z-0" colSpan={3}>
+                      <TableHead className="text-center font-semibold relative z-0" colSpan={4}>
                         Rumah Rusak
                       </TableHead>
                       <TableHead className="text-center font-semibold relative z-0" colSpan={3}>
@@ -457,6 +475,7 @@ export function DisasterDashboard({
                       <TableHead className="text-center">Ringan</TableHead>
                       <TableHead className="text-center">Sedang</TableHead>
                       <TableHead className="text-center">Berat</TableHead>
+                      <TableHead className="text-center">Hancur/Terbawa Arus</TableHead>
                       <TableHead className="text-center">Ringan</TableHead>
                       <TableHead className="text-center">Sedang</TableHead>
                       <TableHead className="text-center">Berat</TableHead>
@@ -508,6 +527,11 @@ export function DisasterDashboard({
                         </TableCell>
                         <TableCell className="text-center relative z-0">
                           {item.rumah_rusak_berat > 0 ? formatNumber(item.rumah_rusak_berat) : '-'}
+                        </TableCell>
+                        <TableCell className="text-center relative z-0">
+                          {item.rumah_rusak_hancur_terbawa_arus > 0
+                            ? formatNumber(item.rumah_rusak_hancur_terbawa_arus)
+                            : '-'}
                         </TableCell>
                         <TableCell className="text-center relative z-0">
                           {item.sekolah_rusak_ringan > 0
@@ -562,6 +586,9 @@ export function DisasterDashboard({
                       </TableCell>
                       <TableCell className="text-center relative z-0">
                         {formatNumber(totals.rumah_berat)}
+                      </TableCell>
+                      <TableCell className="text-center relative z-0">
+                        {formatNumber(totals.rumah_hancur_terbawa_arus)}
                       </TableCell>
                       <TableCell className="text-center relative z-0">
                         {formatNumber(totals.sekolah_ringan)}
