@@ -46,7 +46,7 @@ export interface HelipadLocationData {
   keterangan: string;
 }
 
-export interface TitikJalanPutusData {
+export interface KondisiJalanData {
   id: string;
   no: number | null; // Overall serial number
   kecamatan: string;

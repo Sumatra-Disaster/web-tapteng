@@ -5,7 +5,7 @@ import {
   mapSheetData,
   mapSheetDataRefugee,
   mapSheetDataHelipad,
-  mapSheetDataTitikJalanPutus,
+  mapSheetDataKondisiJalan,
 } from '@/utils/dataMapper';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://infobencanatapteng.vercel.app';
@@ -50,11 +50,11 @@ export default async function Home() {
   const data = await getSheetData('KECAMATAN!A5:O', spreadsheetId);
   const poskoData = await getSheetData("'POSKO PENGUNGSIAN'!B4:E", spreadsheetId);
   const helipadData = await getSheetData("'TITIK-LOKASI-HELIDROP'!A3:F", spreadsheetId);
-  const jalanPutusData = await getSheetData("'TITIK JALAN PUTUS'!A1:H", spreadsheetId);
+  const jalanPutusData = await getSheetData("'KONDISI-JALAN'!A1:H", spreadsheetId);
 
   const totalPosko = mapSheetDataRefugee(poskoData ?? []);
   const helipadLocations = mapSheetDataHelipad(helipadData ?? []);
-  const jalanPutusLocations = mapSheetDataTitikJalanPutus(jalanPutusData ?? []);
+  const kondisiJalanLocations = mapSheetDataKondisiJalan(jalanPutusData ?? []);
 
   const initialData = mapSheetData(data ?? []);
   console.log(initialData);
@@ -66,7 +66,7 @@ export default async function Home() {
         lastUpdate={lastUpdate}
         totalPosko={totalPosko.totalPosko}
         totalHelipadLocations={helipadLocations.length}
-        totalTitikJalanPutus={jalanPutusLocations.length}
+        totalKondisiJalan={kondisiJalanLocations.length}
       />
     </main>
   );

@@ -3,7 +3,7 @@ import {
   mapSheetData,
   mapSheetDataRefugee,
   mapSheetDataHelipad,
-  mapSheetDataTitikJalanPutus,
+  mapSheetDataKondisiJalan,
 } from '@/utils/dataMapper';
 
 // Force dynamic rendering - always fetch fresh data
@@ -24,7 +24,7 @@ export async function GET() {
 
     const totalPosko = mapSheetDataRefugee(poskoData ?? []);
     const helipadLocations = mapSheetDataHelipad(helipadData ?? []);
-    const jalanPutusLocations = mapSheetDataTitikJalanPutus(jalanPutusData ?? []);
+    const jalanPutusLocations = mapSheetDataKondisiJalan(jalanPutusData ?? []);
     const initialData = mapSheetData(data ?? []);
 
     return Response.json(

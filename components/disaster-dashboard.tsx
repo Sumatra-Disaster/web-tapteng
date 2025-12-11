@@ -33,7 +33,7 @@ interface DisasterDashboardProps {
   lastUpdate: any;
   totalPosko: number;
   totalHelipadLocations: number;
-  totalTitikJalanPutus: number;
+  totalKondisiJalan: number;
 }
 
 export function DisasterDashboard({
@@ -41,7 +41,7 @@ export function DisasterDashboard({
   lastUpdate,
   totalPosko,
   totalHelipadLocations,
-  totalTitikJalanPutus,
+  totalKondisiJalan,
 }: DisasterDashboardProps) {
   const [data, setData] = useState<DisasterData[]>(initialData);
   const [searchTerm, setSearchTerm] = useState('');
@@ -50,8 +50,8 @@ export function DisasterDashboard({
   const [currentTotalPosko, setCurrentTotalPosko] = useState<number>(totalPosko);
   const [currentTotalHelipadLocations, setCurrentTotalHelipadLocations] =
     useState<number>(totalHelipadLocations);
-  const [currentTotalTitikJalanPutus, setCurrentTotalTitikJalanPutus] =
-    useState<number>(totalTitikJalanPutus);
+  const [currentTotalKondisiJalan, setcurrentTotalKondisiJalan] =
+    useState<number>(totalKondisiJalan);
   const [lastRefreshTime, setLastRefreshTime] = useState<number>(Date.now());
 
   const router = useRouter();
@@ -82,7 +82,7 @@ export function DisasterDashboard({
         setCurrentLastUpdate(result.lastUpdate);
         setCurrentTotalPosko(result.totalPosko || totalPosko);
         setCurrentTotalHelipadLocations(result.totalHelipadLocations ?? totalHelipadLocations);
-        setCurrentTotalTitikJalanPutus(result.totalTitikJalanPutus ?? totalTitikJalanPutus);
+        setcurrentTotalKondisiJalan(result.totalKondisiJalan ?? totalKondisiJalan);
         setLastRefreshTime(Date.now());
       }
     } catch (error) {
@@ -91,7 +91,7 @@ export function DisasterDashboard({
     } finally {
       setIsRefreshing(false);
     }
-  }, [totalPosko, totalHelipadLocations, totalTitikJalanPutus]);
+  }, [totalPosko, totalHelipadLocations, totalKondisiJalan]);
 
   // Auto-refresh logic with configurable interval
   useEffect(() => {
@@ -244,10 +244,10 @@ export function DisasterDashboard({
       highlight: 'blue',
     },
     {
-      label: 'Titik Jalan Putus',
-      value: currentTotalTitikJalanPutus || 0,
+      label: 'Kondisi Jalan',
+      value: currentTotalKondisiJalan || 0,
       description: 'Lihat Data',
-      navigateTo: '/titik-jalan-putus',
+      navigateTo: '/kondisi-jalan',
       highlight: 'orange',
     },
     // {
