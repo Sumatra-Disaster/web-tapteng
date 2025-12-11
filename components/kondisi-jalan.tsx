@@ -17,15 +17,15 @@ import { Footer } from './footer';
 import { useRouter } from 'next/navigation';
 import { Header } from './header';
 import { Button } from './ui/button';
-import { TitikJalanPutusData } from '@/interfaces/DisasterData';
+import { KondisiJalanData } from '@/interfaces/DisasterData';
 
-interface TitikJalanPutusProps {
-  initialData: TitikJalanPutusData[];
+interface KondisiJalanProps {
+  initialData: KondisiJalanData[];
   lastUpdate: any;
 }
 
-export function TitikJalanPutus({ initialData, lastUpdate }: TitikJalanPutusProps) {
-  const [data] = useState<TitikJalanPutusData[]>(initialData);
+export function KondisiJalan({ initialData, lastUpdate }: KondisiJalanProps) {
+  const [data] = useState<KondisiJalanData[]>(initialData);
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
 
@@ -62,7 +62,7 @@ export function TitikJalanPutus({ initialData, lastUpdate }: TitikJalanPutusProp
           Kembali ke beranda
         </Button>
 
-        <Header lastUpdateDate={lastUpdateDate} showActions={false} title="Titik Jalan Putus" />
+        <Header lastUpdateDate={lastUpdateDate} showActions={false} title="Kondisi Jalan" />
 
         {/* Search */}
         <div className="relative">
@@ -87,8 +87,8 @@ export function TitikJalanPutus({ initialData, lastUpdate }: TitikJalanPutusProp
               <div className="overflow-x-auto">
                 <Table>
                   <TableCaption className="px-6 text-left pb-2">
-                    Daftar titik jalan putus akibat bencana banjir bandang dan longsor di Kabupaten
-                    Tapanuli Tengah.
+                    Daftar kondisi jalan putus akibat bencana banjir bandang dan longsor di
+                    Kabupaten Tapanuli Tengah.
                   </TableCaption>
                   <TableHeader className="sticky top-0 z-10 bg-background/95 backdrop-blur">
                     <TableRow className="text-xs uppercase tracking-wide">

@@ -3,7 +3,7 @@ import {
   DisasterData,
   EvacueeData,
   HelipadLocationData,
-  TitikJalanPutusData,
+  KondisiJalanData,
   SheetValues,
 } from '../interfaces/DisasterData';
 
@@ -243,7 +243,7 @@ export function mapSheetDataHelipad(sheetData: SheetValues): HelipadLocationData
     .filter((record): record is HelipadLocationData => record !== null);
 }
 
-export function mapSheetDataTitikJalanPutus(sheetData: SheetValues): TitikJalanPutusData[] {
+export function mapSheetDataKondisiJalan(sheetData: SheetValues): KondisiJalanData[] {
   if (!sheetData || sheetData.length < 2) {
     return [];
   }
@@ -254,7 +254,7 @@ export function mapSheetDataTitikJalanPutus(sheetData: SheetValues): TitikJalanP
   let currentKecamatan = '';
 
   return dataRows
-    .map((row, index): TitikJalanPutusData | null => {
+    .map((row, index): KondisiJalanData | null => {
       // Column mapping:
       // A (row[0]): NO (primary identifier)
       // B (row[1]): KECAMATAN (district, with merged cells)
@@ -306,5 +306,5 @@ export function mapSheetDataTitikJalanPutus(sheetData: SheetValues): TitikJalanP
         keteranganTambahan,
       };
     })
-    .filter((record): record is TitikJalanPutusData => record !== null);
+    .filter((record): record is KondisiJalanData => record !== null);
 }
