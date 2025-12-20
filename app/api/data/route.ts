@@ -16,7 +16,7 @@ export async function GET() {
     // Fetch data from Google Sheets
     const [lastUpdate, data, poskoData, helipadData, jalanPutusData] = await Promise.all([
       getSheetLastUpdate(spreadsheetId),
-      getSheetData('KECAMATAN!A5:O', spreadsheetId),
+      getSheetData('KECAMATAN!A5:P', spreadsheetId),
       getSheetData("'POSKO PENGUNGSIAN'!B4:E", spreadsheetId),
       getSheetData("'TITIK-LOKASI-HELIDROP'!A3:F", spreadsheetId),
       getSheetData("'TITIK JALAN PUTUS'!A1:H", spreadsheetId),
